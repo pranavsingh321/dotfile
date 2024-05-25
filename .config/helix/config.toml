@@ -1,0 +1,34 @@
+theme = "catppuccin_macchiato"
+
+[editor]
+line-number = "relative"
+cursorline = true
+bufferline = "multiple"
+rulers = [120]
+
+[editor.cursor-shape]
+insert = "bar"
+normal = "block"
+select = "underline"
+
+[editor.indent-guides]
+character = "|"
+render = true
+
+[editor.statusline]
+left = ["mode", "spinner", "version-control", "file-name"]
+center = []
+right = ["selections", "primary-selection-length", "position", "position-percentage", "spacer", "diagnostics", "workspace-diagnostics"]
+
+[keys.normal]
+"A-," = "goto_previous_buffer"
+"A-." = "goto_next_buffer"
+"A-W" = ":buffer-close"
+"A-/" = "repeat_last_motion"
+"A-x" = "extend_to_line_bounds"
+"X" = ["extend_line_up", "extend_to_line_bounds"]
+
+
+[keys.select]
+"A-x" = "extend_to_line_bounds"
+"X" = ["extend_line_up", "extend_to_line_bounds"]
