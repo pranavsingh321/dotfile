@@ -27,6 +27,7 @@ right = ["selections", "primary-selection-length", "position", "position-percent
 "A-/" = "repeat_last_motion"
 "A-x" = "extend_to_line_bounds"
 "X" = ["extend_line_up", "extend_to_line_bounds"]
+"ret" = ["open_below", "normal_mode"] # Enter adds line above
 
 
 [keys.select]
