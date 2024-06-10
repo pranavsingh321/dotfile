@@ -26,6 +26,8 @@ alias g='git'
 alias rgf='rg --files'
 alias j='jobs'
 alias v='nvim'
+alias h='hxx'
+export HELIX_RUNTIME=~/helix/runtime
 alias mod='rg --files --hidden --stats | xargs -d "\n" stat --format="%Y %n" 2>/dev/null | sort -n | tail -n 3 | cut -d" " -f2-'
 
 eval "$(zoxide init bash --cmd cd)"
