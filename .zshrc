@@ -146,6 +146,7 @@ alias rgf='rg --files'
 alias j='jobs'
 alias v='nvim'
 alias h='hxx'
+alias s='source ~/.zshrc'
 export HELIX_RUNTIME=~/helix/runtime
 alias act="source $(poetry env info --path)/bin/activate"
 export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
