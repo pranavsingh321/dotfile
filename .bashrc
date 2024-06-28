@@ -27,6 +27,7 @@ alias rgf='rg --files'
 alias j='jobs'
 alias v='nvim'
 alias h='hxx'
+source <(fzf --bash)
 alias s='source ~/.bashrc'
 export HELIX_RUNTIME=~/helix/runtime
 alias mod='rg --files --hidden --stats | xargs -d "\n" stat --format="%Y %n" 2>/dev/null | sort -n | tail -n 3 | cut -d" " -f2-'

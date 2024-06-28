@@ -78,6 +78,7 @@ ZSH_THEME="robbyrussell"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(git)
+plugins=(git zsh-autosuggestions)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -115,8 +116,6 @@ source ~/powerlevel10k/powerlevel10k.zsh-theme
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
 #export FZF_DEFAULT_COMMAND="fzf --preview 'bat --style=numbers --color=always --line-range :500 {}'"
 #export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_DEFAULT_OPTS='--height 40% --preview "bat --style=numbers --color=always --line-range :500 {}"'
@@ -131,7 +130,6 @@ alias gb="git branch"
 alias gs="git status"
 alias gcm="git checkout master"
 alias gcd="git checkout develop"
-
 alias gd='git diff'
 alias gcb='git checkout -b'
 alias gc='git checkout'
@@ -153,3 +151,7 @@ export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
 export PATH="/Users/pp123/Downloads/flutter/bin:$PATH"
 alias mod='rg --files --hidden --stats | xargs -d "\n" stat --format="%Y %n" 2>/dev/null | sort -n | tail -n 3 | cut -d" " -f2-'
 [ -f ~/.secret ] && source ~/.secret
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+# Use fzf for completion
+autoload -U compinit
+compinit
