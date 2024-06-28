@@ -77,10 +77,13 @@ ZSH_THEME="robbyrussell"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git)
-plugins=(git zsh-autosuggestions)
-
+typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
+# Customize suggestion color
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=8'
 source $ZSH/oh-my-zsh.sh
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+plugins=(git zsh-autosuggestions)
 
 # User configuration
 
@@ -151,7 +154,3 @@ export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
 export PATH="/Users/pp123/Downloads/flutter/bin:$PATH"
 alias mod='rg --files --hidden --stats | xargs -d "\n" stat --format="%Y %n" 2>/dev/null | sort -n | tail -n 3 | cut -d" " -f2-'
 [ -f ~/.secret ] && source ~/.secret
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-# Use fzf for completion
-autoload -U compinit
-compinit
