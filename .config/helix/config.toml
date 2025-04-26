@@ -7,6 +7,10 @@ cursorline = true
 bufferline = "multiple"
 rulers = [100]
 idle-timeout = 0
+end-of-line-diagnostics = "hint"
+
+[editor.inline-diagnostics]
+cursor-line = "warning" # show warnings and errors on the cursorline inline
 
 [editor.cursor-shape]
 insert = "bar"
@@ -32,7 +36,7 @@ right = ["selections", "primary-selection-length", "position", "position-percent
 "ret" = ["open_below", "normal_mode"] # Enter adds line above
 "*" = ["move_next_word_end", "move_prev_word_start", "search_selection"]
 C-g = [":new", ":insert-output lazygit-gm", ":buffer-close!", ":redraw"]
-
+esc = ["collapse_selection", "keep_primary_selection"]
 
 [keys.select]
 "A-x" = "extend_to_line_bounds"
