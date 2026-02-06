@@ -63,3 +63,13 @@ eval "$(starship init bash)"
 # ---- Carapace ----
 export CARAPACE_BRIDGES='zsh,bash'
 source <(carapace _carapace bash)
+
+
+#git clone --recursive https://github.com/akinomyoga/ble.sh.git
+#cd ble.sh
+#make
+#sudo make install
+
+# ~/.bashrc
+[[ $- == *i* ]] && source ~/ble.sh/out/ble.sh
+
