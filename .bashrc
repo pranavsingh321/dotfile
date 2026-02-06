@@ -35,6 +35,14 @@ alias mod='rg --files --hidden --stats | xargs -d "\n" stat --format="%Y %n" 2>/
 eval "$(zoxide init bash --cmd cd)"
 export PS1="$ "
 
+# --- Starship ---
+eval "$(starship init bash)"
+
+# --- Carapace completions ---
+export CARAPACE_BRIDGES='zsh,bash'
+source <(carapace _carapace bash)
+
+
 if [ -f ~/.secret ]; then
   source ~/.secret
 fi
