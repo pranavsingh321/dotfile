@@ -1,6 +1,9 @@
 # ---- interactive only ----
 [[ $- != *i* ]] && return
 
+if [[ "$TERM" == "xterm-ghostty" ]]; then
+  export TERM=xterm-256color
+fi
 # ---- history ----
 export HISTFILE="$HOME/.bash_history"
 export HISTSIZE=1000
