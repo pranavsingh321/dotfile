@@ -40,6 +40,7 @@ export PATH="/Users/pp123/.opencode/bin:$PATH"
 
 # --- FZF Options ---
 export FZF_DEFAULT_OPTS='--height 40% --preview "bat --style=numbers --color=always --line-range :500 {}"'
+export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden'
 
 # --- Aliases ---
 alias brewr='arch -x86_64 /usr/local/bin/brew'
