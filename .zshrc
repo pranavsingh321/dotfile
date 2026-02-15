@@ -1,21 +1,13 @@
-# --- Powerlevel10k Instant Prompt ---
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
-
-# Fix Ghostty TERM
+# --- Ghostty TERM fix ---
 if [[ "$TERM" == "xterm-ghostty" ]]; then
   export TERM=xterm-256color
 fi
 
+# --- Oh My Zsh ---
 export ZSH="$HOME/.oh-my-zsh"
-
-ZSH_THEME="robbyrussell"
 
 # Plugins MUST be before oh-my-zsh.sh
 plugins=(git zsh-autosuggestions)
-
-typeset -g POWERLEVEL9K_INSTANT_PROMPT=off
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=8'
 
 source $ZSH/oh-my-zsh.sh
@@ -23,10 +15,6 @@ source $ZSH/oh-my-zsh.sh
 # --- fzf ---
 source $(brew --prefix)/opt/fzf/shell/key-bindings.zsh
 source $(brew --prefix)/opt/fzf/shell/completion.zsh
-
-# --- Powerlevel10k ---
-source ~/powerlevel10k/powerlevel10k.zsh-theme
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 # --- Environment ---
 export LANG="en_US.UTF-8"
@@ -78,5 +66,6 @@ alias s='source ~/.zshrc'
 export CARAPACE_BRIDGES='zsh,bash'
 eval "$(carapace _carapace zsh)"
 
-# --- Starship ---
+# Initialize Starship
 eval "$(starship init zsh)"
+
