@@ -36,6 +36,8 @@ alias reload='exec bash'
 command -v bat >/dev/null || alias bat=batcat
 
 alias fz='find . -type f | fzf --preview "bat --style=numbers --color=always {}"'
+export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden'
+
 
 # ---- helix ----
 export HELIX_RUNTIME="$HOME/helix/runtime"
