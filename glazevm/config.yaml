@@ -7,7 +7,7 @@ general:
   toggle_workspace_on_refocus: false
 
   cursor_jump:
-    enabled: true
+    enabled: false
     trigger: 'monitor_focus'
 
   hide_method: 'cloak'
@@ -27,8 +27,7 @@ gaps:
 window_effects:
   focused_window:
     border:
-      enabled: true
-      color: '#8dbcff'
+      enabled: false
     hide_title_bar:
       enabled: false
     corner_style:
@@ -40,8 +39,7 @@ window_effects:
 
   other_windows:
     border:
-      enabled: true
-      color: '#a1a1a1'
+      enabled: false
     hide_title_bar:
       enabled: false
     corner_style:
@@ -78,12 +76,21 @@ workspaces:
 
 
 # =========================================================
-# WINDOW RULES (CLEAN + RELIABLE)
+# WINDOW RULES (STABLE + MINIMAL)
 # =========================================================
 window_rules:
 
   # ----------------------------
-  # IGNORE SYSTEM / SPECIAL WINDOWS
+  # FIX: native Windows menus (safe)
+  # ----------------------------
+  - commands: ['ignore']
+    match:
+      - window_class:
+          equals: '#32768'
+
+
+  # ----------------------------
+  # IGNORE SYSTEM WINDOWS
   # ----------------------------
   - commands: ['ignore']
     match:
@@ -106,53 +113,71 @@ window_rules:
 
 
   # ----------------------------
-  # TERMINAL → WORKSPACE 1
+  # ELECTRON POPUPS ONLY (SAFE)
   # ----------------------------
-  - commands: ["move --workspace 1"]
+  - commands: ['ignore']
     match:
-      - window_process:
-          equals: "WindowsTerminal.exe"
+      - window_class:
+          regex: 'Chrome_WidgetWin_1'
+        window_title:
+          regex: '.*(menu|dropdown|tooltip).*'
 
 
   # ----------------------------
-  # BRAVE → WORKSPACE 2
+  # OUTLOOK FIX (IMPORTANT)
   # ----------------------------
-  - commands: ["move --workspace 2"]
-    match:
-      - window_process:
-          equals: "brave.exe"
-
-
-  # ----------------------------
-  # EXPLORER → WORKSPACE 3
-  # ----------------------------
-  - commands: ["move --workspace 3"]
-    match:
-      - window_process:
-          equals: "explorer.exe"
-
-
-  # ----------------------------
-  # OUTLOOK → WORKSPACE 4
-  # ----------------------------
-  - commands: ["move --workspace 4"]
+  - commands: ['set-floating']
     match:
       - window_process:
           regex: "OUTLOOK.EXE|olk.exe|olkdesktop.exe"
 
 
   # ----------------------------
-  # TEAMS → WORKSPACE 5
+  # NOTEPAD FIX (IMPORTANT)
   # ----------------------------
+  - commands: ['set-floating']
+    match:
+      - window_process:
+          equals: "Notepad.exe"
+
+
+  # ----------------------------
+  # DIALOG WINDOWS → FLOAT
+  # ----------------------------
+  - commands: ['set-floating --centered']
+    match:
+      - window_title:
+          regex: '.*(Open|Save|Browse|Select).*'
+
+
+  # ----------------------------
+  # APP PLACEMENT
+  # ----------------------------
+  - commands: ["move --workspace 1"]
+    match:
+      - window_process:
+          equals: "WindowsTerminal.exe"
+
+  - commands: ["move --workspace 2"]
+    match:
+      - window_process:
+          equals: "brave.exe"
+
+  - commands: ["move --workspace 3"]
+    match:
+      - window_process:
+          equals: "explorer.exe"
+
+  - commands: ["move --workspace 4"]
+    match:
+      - window_process:
+          regex: "OUTLOOK.EXE|olk.exe|olkdesktop.exe"
+
   - commands: ["move --workspace 5"]
     match:
       - window_process:
           regex: "ms-teams.exe|Teams.exe|ms-teamsbootstrapper.exe"
 
-
-  # ----------------------------
-  # CHROME → WORKSPACE 8
-  # ----------------------------
   - commands: ["move --workspace 8"]
     match:
       - window_process:
@@ -182,9 +207,6 @@ binding_modes:
 # =========================================================
 keybindings:
 
-  # ----------------------------
-  # FOCUS MOVEMENT
-  # ----------------------------
   - commands: ['focus --direction left']
     bindings: ['alt+h', 'alt+left']
   - commands: ['focus --direction right']
@@ -194,17 +216,12 @@ keybindings:
   - commands: ['focus --direction down']
     bindings: ['alt+j', 'alt+down']
 
-
-  # ----------------------------
-  # WORKSPACE NAVIGATION
-  # ----------------------------
   - commands: ['focus --prev-active-workspace']
     bindings: ['alt+,']
   - commands: ['focus --next-active-workspace']
     bindings: ['alt+.']
   - commands: ['focus --recent-workspace']
     bindings: ['alt+/']
-
 
   - commands: ['focus --workspace 1']
     bindings: ['alt+1']
@@ -225,7 +242,6 @@ keybindings:
   - commands: ['focus --workspace 9']
     bindings: ['alt+9']
 
-
   - commands: ['move --workspace 1', 'focus --workspace 1']
     bindings: ['alt+shift+1']
   - commands: ['move --workspace 2', 'focus --workspace 2']
@@ -245,55 +261,31 @@ keybindings:
   - commands: ['move --workspace 9', 'focus --workspace 9']
     bindings: ['alt+shift+9']
 
-
-  # ----------------------------
-  # WINDOW STATE CONTROL
-  # ----------------------------
   - commands: ['wm-cycle-focus']
     bindings: ['alt+space']
-
   - commands: ['toggle-floating --centered']
     bindings: ['alt+shift+space']
-
   - commands: ['toggle-tiling']
     bindings: ['alt+shift+t']
-
   - commands: ['toggle-fullscreen']
     bindings: ['alt+shift+f']
-
   - commands: ['toggle-minimized']
     bindings: ['alt+shift+m']
-
   - commands: ['close']
     bindings: ['alt+shift+q']
 
-
-  # ----------------------------
-  # SYSTEM CONTROL
-  # ----------------------------
   - commands: ['wm-toggle-pause']
     bindings: ['alt+shift+p']
-
   - commands: ['wm-exit']
     bindings: ['alt+shift+e']
-
   - commands: ['wm-reload-config']
     bindings: ['alt+shift+r']
-
   - commands: ['wm-redraw']
     bindings: ['alt+shift+w']
 
-
-  # ----------------------------
-  # RESIZE MODE
-  # ----------------------------
   - commands: ['wm-enable-binding-mode --name resize']
     bindings: ['alt+r']
 
-
-  # ----------------------------
-  # APP LAUNCHERS (SAFE + PORTABLE)
-  # ----------------------------
   - commands: ["shell-exec wt"]
     bindings: ["alt+ctrl+t"]
 
