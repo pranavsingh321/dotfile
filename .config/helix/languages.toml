@@ -20,8 +20,13 @@ autoImportCompletions = true
 reportMissingTypeStubs = false
 
 [language-server.ruff]
-command = "ruff-lsp"
+command = "ruff"
+args = ["server"]
 
+[[language]]
+name = "go"
+auto-format = true
+formatter = { command = "gofmt" }
 
 # Rust
 [[language]]
@@ -34,11 +39,12 @@ indent = { tab-width = 4, unit = "    " }
 auto-format = true
 
 
-# TypeScript
 [[language]]
 name = "typescript"
-language-servers = ["typescript-language-server"]
 auto-format = true
+language-servers = ["typescript-language-server"]
+formatter = { command = "prettier", args = ["--stdin-filepath", "%filepath"] }
+
 
 # JavaScript
 [[language]]
