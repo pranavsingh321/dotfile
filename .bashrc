@@ -17,6 +17,7 @@ alias ga='git add'
 alias gf='git fetch'
 alias gl='git log'
 alias gb='git branch'
+alias gd='git diff'
 alias gs='git status'
 alias gc='git checkout'
 alias gcb='git checkout -b'
@@ -76,5 +77,5 @@ source <(carapace _carapace bash)
 #sudo make install
 
 # ~/.bashrc
-[[ $- == *i* ]] && source ~/ble.sh/out/ble.sh
+# [[ $- == *i* ]] && source ~/ble.sh/out/ble.sh
 
