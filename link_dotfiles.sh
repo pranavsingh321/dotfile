@@ -20,6 +20,9 @@ echo "Secret sample copied successfully."
 echo "Copy the helix folder"
 cp -rf $SOURCE_DIR/.config/helix $HOME/.config/
 
+echo "Copy the termux folder"
+cp -rf $SOURCE_DIR/.termux $HOME/
+
 # Check if the current directory is ~/dotfiles
 if [[ "$SOURCE_DIR" != "$EXPECTED_DIR" ]]; then
     echo "Error: This script must be run from the ~/dotfiles directory."
