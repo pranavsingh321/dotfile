@@ -169,7 +169,7 @@ install_termux() {
 
     pkg update
 
-    local packages=(git zsh fzf ripgrep bat tmux neovim jq zoxide starship helix)
+    local packages=(git zsh fzf ripgrep bat tmux jq zoxide starship helix)
     for pkg in "${packages[@]}"; do
         termux_install "$pkg"
     done
