@@ -169,14 +169,12 @@ install_termux() {
 
     pkg update
 
-    local packages=(git zsh fzf ripgrep bat tmux jq zoxide starship helix)
+    local packages=(git fzf ripgrep bat tmux jq zoxide starship helix)
     for pkg in "${packages[@]}"; do
         termux_install "$pkg"
     done
 
     echo "==> Installing shell/editor extras"
-    ensure_oh_my_zsh
-    ensure_zsh_autosuggestions
     ensure_tpm
 }
 
