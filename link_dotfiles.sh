@@ -12,6 +12,20 @@ SCRIPT_NAME=$(basename "$0")
 # Expected directory for dotfile
 EXPECTED_DIR="$HOME/dotfile"
 
+# Check if the current directory is ~/dotfiles
+if [[ "$SOURCE_DIR" != "$EXPECTED_DIR" ]]; then
+    echo "Error: This script must be run from the ~/dotfiles directory."
+    exit 1
+fi
+
+# Install required packages before copying any config
+if [[ -x "$SOURCE_DIR/install.sh" ]]; then
+    echo "Installing required packages..."
+    bash "$SOURCE_DIR/install.sh"
+else
+    echo "Warning: install.sh not found next to this script, skipping package installation."
+fi
+
 # Add secret
 echo "Copying secret sample..."
 cp -n "$SOURCE_DIR/.secret_sample" "$HOME/.secret"
@@ -22,12 +36,6 @@ cp -rf $SOURCE_DIR/.config/helix $HOME/.config/
 
 echo "Copy the termux folder"
 cp -rf $SOURCE_DIR/.termux $HOME/
-
-# Check if the current directory is ~/dotfiles
-if [[ "$SOURCE_DIR" != "$EXPECTED_DIR" ]]; then
-    echo "Error: This script must be run from the ~/dotfiles directory."
-    exit 1
-fi
 
 # Function to create symbolic links or copy directories for dotfiles
 link_or_copy_dotfiles() {
