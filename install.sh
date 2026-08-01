@@ -180,7 +180,7 @@ install_termux() {
 
     pkg update
 
-    local packages=(git fzf ripgrep bat tmux jq zoxide starship helix carapace python uv)
+    local packages=(git fzf ripgrep bat tmux jq zoxide starship helix carapace python uv cronie)
     for pkg in "${packages[@]}"; do
         termux_install "$pkg"
     done
