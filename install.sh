@@ -109,6 +109,17 @@ ensure_carapace() {
     fi
 }
 
+ensure_python_tools() {
+    if command -v pyright >/dev/null 2>&1 && command -v ruff >/dev/null 2>&1; then
+        echo "  pyright and ruff already installed"
+    elif command -v pip >/dev/null 2>&1 || command -v pip3 >/dev/null 2>&1; then
+        echo "  Installing pyright and ruff via pip..."
+        pip install pyright ruff || pip3 install pyright ruff || echo "  WARN: could not install pyright/ruff via pip"
+    else
+        echo "  WARN: pip not found. Install python first, then run pip install pyright ruff."
+    fi
+}
+
 # --- macOS -----------------------------------------------------------------
 
 install_macos() {
@@ -169,13 +180,14 @@ install_termux() {
 
     pkg update
 
-    local packages=(git fzf ripgrep bat tmux jq zoxide starship helix carapace)
+    local packages=(git fzf ripgrep bat tmux jq zoxide starship helix carapace python)
     for pkg in "${packages[@]}"; do
         termux_install "$pkg"
     done
 
     echo "==> Installing shell/editor extras"
     ensure_tpm
+    ensure_python_tools
 }
 
 # --- Main ------------------------------------------------------------------
