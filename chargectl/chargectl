@@ -1,0 +1,23 @@
+#!/data/data/com.termux/files/usr/bin/sh
+
+S='^sh /data/data/com.termux/files/home/chargectl.sh$'
+L=/data/data/com.termux/files/home/chargectl.log
+
+case "$1" in
+	status)
+		su -c "pgrep -f '$S' >/dev/null && echo daemon: running || echo daemon: stopped"
+		su -c "cat /sys/class/power_supply/battery/status /sys/class/power_supply/battery/capacity /sys/class/power_supply/battery/input_suspend"
+		;;
+	start)
+		su -c "if ! pgrep -f '$S' >/dev/null 2>&1; then setsid sh /data/data/com.termux/files/home/chargectl.sh </dev/null >/dev/null 2>&1 & fi"
+		;;
+	stop)
+		su -c "pkill -9 -f '$S'"
+		;;
+	log)
+		su -c "tail -n 50 $L"
+		;;
+	*)
+		echo "usage: chargectl {status|start|stop|log}"
+		;;
+esac
