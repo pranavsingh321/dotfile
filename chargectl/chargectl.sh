@@ -10,6 +10,12 @@ log() {
 	echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1" >> "$LOG"
 }
 
+notify() {
+	su 2000 -c "cmd notification post -t Chargectl chargectl \"$1\"" >/dev/null 2>&1
+}
+
+notify "Battery charge controller started (stop ${STOP}%, resume ${RESUME}%)"
+
 while :; do
 	CAP=$(cat "$CHG/capacity")
 	if [ "$(cat /sys/class/power_supply/usb/online)" = "1" ]; then
