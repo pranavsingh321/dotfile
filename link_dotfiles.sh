@@ -58,4 +58,9 @@ link_or_copy_dotfiles() {
 # Execute the function
 echo "Setting up dotfiles..."
 link_or_copy_dotfiles
+
+# tmux switch-session script must be at ~/.tmux/ (path bound in .tmux.conf)
+mkdir -p "$TARGET_DIR/.tmux"
+ln -sf "$SOURCE_DIR/switch-session-fzf.sh" "$TARGET_DIR/.tmux/switch-session-fzf.sh"
+echo "Linking switch-session-fzf.sh to ~/.tmux/"
 echo "Dotfiles setup complete."
