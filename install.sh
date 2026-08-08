@@ -155,7 +155,7 @@ install_linux() {
 
     ensure_apt_available
 
-    local packages=(git zsh fzf bat ripgrep tmux neovim jq zoxide)
+    local packages=(git zsh fzf bat ripgrep tmux neovim helix starship carapace tmux gh uv zoxide jq zoxide)
     for pkg in "${packages[@]}"; do
         apt_install "$pkg"
     done
@@ -180,7 +180,7 @@ install_termux() {
 
     pkg update
 
-    local packages=(git fzf ripgrep bat tmux jq zoxide starship helix carapace python uv cronie)
+    local packages=(git fzf ripgrep bat tmux jq zoxide starship helix carapace python tmux gh uv cronie)
     for pkg in "${packages[@]}"; do
         termux_install "$pkg"
     done
