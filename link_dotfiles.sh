@@ -37,6 +37,12 @@ cp -rf $SOURCE_DIR/.config/helix $HOME/.config/
 echo "Copy the termux folder"
 cp -rf $SOURCE_DIR/.termux $HOME/
 
+# Deploy the (empty) motd on Termux to silence the welcome banner on new sessions/boot
+if [[ -n "$PREFIX" && -d "$PREFIX/etc" ]]; then
+    echo "Silencing Termux welcome banner (motd)"
+    cp -f "$SOURCE_DIR/.termux/motd" "$PREFIX/etc/motd"
+fi
+
 # Function to create symbolic links or copy directories for dotfiles
 link_or_copy_dotfiles() {
     for item in "$SOURCE_DIR"/.*; do
@@ -49,7 +55,7 @@ link_or_copy_dotfiles() {
             else
                 # If it's a file, create a symbolic link
                 echo "Creating symbolic link: $item to $TARGET_DIR/$(basename "$item")"
-                ln -sv "$item" "$TARGET_DIR/$(basename "$item")"
+                ln -sfv "$item" "$TARGET_DIR/$(basename "$item")"
             fi
         fi
     done
