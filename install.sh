@@ -179,6 +179,7 @@ install_termux() {
     echo "==> Installing packages via pkg"
 
     pkg update
+    pkg upgrade -y
 
     local packages=(git fzf ripgrep bat tmux jq zoxide starship helix carapace python tmux gh uv cronie)
     for pkg in "${packages[@]}"; do
