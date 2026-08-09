@@ -1,6 +1,6 @@
 #!/system/bin/sh
 
-RESUME=20
+RESUME=30
 STOP=90
 INTERVAL=120
 CHG=/sys/class/power_supply/battery
@@ -18,13 +18,23 @@ notify "Battery charge controller started (stop ${STOP}%, resume ${RESUME}%)"
 
 while :; do
 	CAP=$(cat "$CHG/capacity")
-	if [ "$(cat /sys/class/power_supply/usb/online)" = "1" ]; then
-		if [ "$CAP" -ge "$STOP" ] && [ "$(cat "$CHG/input_suspend")" != "1" ]; then
+	ONLINE=$(cat /sys/class/power_supply/usb/online)
+	SUSPEND=$(cat "$CHG/input_suspend")
+	if [ "$ONLINE" = "1" ]; then
+		if [ "$CAP" -ge "$STOP" ] && [ "$SUSPEND" != "1" ]; then
 			echo 1 > "$CHG/input_suspend"
 			log "stopped charging at ${CAP}%"
-		elif [ "$CAP" -le "$RESUME" ] && [ "$(cat "$CHG/input_suspend")" != "0" ]; then
+			notify "Charging stopped at ${CAP}%"
+		elif [ "$CAP" -le "$RESUME" ] && [ "$SUSPEND" != "0" ]; then
 			echo 0 > "$CHG/input_suspend"
 			log "resumed charging at ${CAP}%"
+			notify "Charging resumed at ${CAP}%"
+		fi
+	else
+		if [ "$CAP" -le "$RESUME" ] && [ "$SUSPEND" != "0" ]; then
+			echo 0 > "$CHG/input_suspend"
+			log "resumed charging at ${CAP}% (cable present, input re-enabled)"
+			notify "Charging resumed at ${CAP}%"
 		fi
 	fi
 	sleep "$INTERVAL"

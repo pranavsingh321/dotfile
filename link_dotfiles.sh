@@ -43,6 +43,19 @@ if [[ -n "$PREFIX" && -d "$PREFIX/etc" ]]; then
     cp -f "$SOURCE_DIR/.termux/motd" "$PREFIX/etc/motd"
 fi
 
+# Deploy the battery charge limiter on Termux (daemon + control script).
+# Daemon path is fixed at ~/chargectl.sh (used by the Magisk boot module and
+# the termux-login hook); needs root, so also wire up an autostart hook.
+if [[ -n "$PREFIX" && -d "$SOURCE_DIR/chargectl" ]]; then
+    echo "Installing chargectl (battery charge limiter)"
+    cp -f "$SOURCE_DIR/chargectl/chargectl.sh" "$HOME/chargectl.sh"
+    cp -f "$SOURCE_DIR/chargectl/chargectl" "$HOME/chargectl"
+    chmod 700 "$HOME/chargectl.sh" "$HOME/chargectl"
+    cp -f "$SOURCE_DIR/chargectl/termux-login.sh" "$HOME/.termux/termux-login.sh"
+    chmod 700 "$HOME/.termux/termux-login.sh"
+    echo "Done. Start it with: ~/chargectl start  (autostarts on Termux login)"
+fi
+
 # Function to create symbolic links or copy directories for dotfiles
 link_or_copy_dotfiles() {
     for item in "$SOURCE_DIR"/.*; do

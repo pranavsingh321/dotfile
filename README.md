@@ -35,6 +35,7 @@ To install packages only, run `./install.sh` on its own.
 | `.config/helix/`            | Helix editor config                |
 | `.config/aerospace/`        | AeroSpace window manager config    |
 | `.termux/`                  | Termux config                      |
+| `chargectl/`                | Battery charge limiter (Termux)    |
 | `glazevm/`                  | GlazeWM (Windows) config           |
 | `start.bat`                 | Windows startup script             |
 
@@ -48,3 +49,35 @@ To install packages only, run `./install.sh` on its own.
 
 - The install script is idempotent; rerunning it only installs missing items.
 - Secrets live in `~/.secret` (ignored by git); use `.secret_sample` as a template.
+
+## Chargectl (battery limiter)
+
+Root-only daemon for the phone: stops charging at 90%, resumes below 30% (as a
+notification), by writing `1`/`0` to `/sys/class/power_supply/battery/input_suspend`.
+
+**Install** — running `./link_dotfiles.sh` on Termux copies these automatically:
+
+```sh
+cp chargectl/chargectl.sh ~/chargectl.sh        # the daemon (fixed path)
+cp chargectl/chargectl ~/chargectl              # control script
+cp chargectl/termux-login.sh ~/.termux/termux-login.sh   # autostart on login
+chmod 700 ~/chargectl.sh ~/chargectl ~/.termux/termux-login.sh
+```
+
+**Start / control**:
+
+```sh
+~/chargectl start     # launch the daemon
+~/chargectl status    # daemon + battery status + input_suspend
+~/chargectl stop
+~/chargectl log       # tail ~/chargectl.log
+```
+
+**Boot autostart** — `~/.termux/termux-login.sh` starts it on login. For a true
+boot-time start (works even if Termux never opens), a Magisk module runs
+`~/chargectl.sh` if present (module.prop/service.sh live on the phone under
+`/data/adb/modules/chargectl`).
+
+**Troubleshooting** — if the phone charges past 90%, the daemon isn't running:
+`~/chargectl status` prints `daemon: stopped`. Start it, then verify the node is
+writable (`echo 1 > /sys/class/power_supply/battery/input_suspend`).
