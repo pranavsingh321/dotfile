@@ -181,7 +181,7 @@ install_termux() {
     pkg update
     pkg upgrade -y
 
-    local packages=(git fzf ripgrep bat tmux jq zoxide starship helix carapace python tmux gh uv cronie golang)
+    local packages=(git fzf ripgrep bat tmux jq zoxide starship helix carapace python tmux gh uv cronie golang termux-api)
     for pkg in "${packages[@]}"; do
         termux_install "$pkg"
     done
