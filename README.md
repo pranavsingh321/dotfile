@@ -74,9 +74,16 @@ chmod 700 ~/chargectl.sh ~/chargectl ~/.termux/termux-login.sh
 ```
 
 **Boot autostart** — `~/.termux/termux-login.sh` starts it on login. For a true
-boot-time start (works even if Termux never opens), a Magisk module runs
-`~/chargectl.sh` if present (module.prop/service.sh live on the phone under
-`/data/adb/modules/chargectl`).
+boot-time start (works even if Termux never opens), use the Magisk module in
+`chargectl/magisk-module/` — it runs `~/chargectl.sh` as root at boot and waits
+for `/data` to be decrypted first:
+
+```sh
+cd chargectl/magisk-module
+zip -r /sdcard/chargectl-module.zip module.prop service.sh
+su -c 'magisk --install-module /sdcard/chargectl-module.zip'
+reboot
+```
 
 **Troubleshooting** — if the phone charges past 90%, the daemon isn't running:
 `~/chargectl status` prints `daemon: stopped`. Start it, then verify the node is

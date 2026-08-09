@@ -1,0 +1,7 @@
+id=chargectl
+name=Chargectl
+version=v1.0
+versionCode=1
+author=local
+description=Battery charge limiter autostart: stops charging at 90%, resumes below 30%
+minMagisk=25200
