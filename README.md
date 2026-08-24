@@ -54,13 +54,6 @@ To analyze any project, point `PROJECT_DIR` at it — it is mounted read-write a
 > On older Docker installs without the compose plugin, use `docker-compose`
 > instead of `docker compose`.
 
-### Plain Docker (no Compose)
-
-```sh
-docker build -t dottools .
-docker run -it --rm -v "$PWD":/workspace dottools
-```
-
 Notes:
 
 - Everything is installed via `link_dotfiles.sh` during the build; the shell is

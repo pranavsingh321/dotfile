@@ -1,6 +1,6 @@
 # Dotfiles environment on Linux with Python 3.12 base.
-# Build:  docker build -t dottools .
-# Run:    docker run -it --rm -p ... -v "$PWD":/workspace dottools
+# Build:  docker compose build
+# Run:    docker compose run --rm dottools
 FROM python:3.12-slim
 
 ENV DEBIAN_FRONTEND=noninteractive \
