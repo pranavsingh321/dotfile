@@ -71,6 +71,9 @@ RUN curl -LsSf https://astral.sh/uv/install.sh | sh
 
 USER root
 RUN chown -R "$USERNAME:$GID" /home/"$USERNAME"/helix \
+    # Pre-create so the compose uv-cache volume inherits the right owner
+    && mkdir -p "/home/$USERNAME/.cache/uv" \
+    && chown -R "$USERNAME:$GID" "/home/$USERNAME/.cache" \
     # Mounted host dirs are owned by a different UID; stop git refusing to operate on them
     && git config --system --add safe.directory '*' \
     && mkdir -p /workspace && chown "$USERNAME:$GID" /workspace

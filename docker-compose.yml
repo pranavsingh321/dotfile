@@ -8,6 +8,7 @@ services:
         #   USER_ID=$(id -u) GROUP_ID=$(id -g) docker compose build
         UID: ${USER_ID:-1000}
         GID: ${GROUP_ID:-1000}
+    image: dottools  # shared with plain `docker build -t dottools .`
     init: true            # proper signal handling / zombie reaping
     tty: true
     stdin_open: true
