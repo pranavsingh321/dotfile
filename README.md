@@ -23,6 +23,54 @@ The script:
 
 To install packages only, run `./install.sh` on its own.
 
+## Docker (portable analysis environment)
+
+A Linux container (Python 3.12 base) with all the dotfiles applied — useful for
+analyzing a project with the same toolset anywhere, without touching the host.
+
+### Build and run with Compose
+
+From this repo directory:
+
+```sh
+# 1. Build the image
+docker compose build
+
+# 2a. Run an interactive bash session in /workspace (mounts $PWD)
+docker compose run --rm dottools
+
+# 2b. Or mount a specific project instead of $PWD
+PROJECT_DIR=~/some/repo docker compose run --rm dottools
+
+# 2c. Or keep it running in the background and attach/detach as needed
+docker compose up -d
+docker compose exec dottools bash     # attach anytime
+docker compose down                   # stop when done
+```
+
+To analyze any project, point `PROJECT_DIR` at it — it is mounted read-write at
+`/workspace`, which is also the shell's starting directory.
+
+> On older Docker installs without the compose plugin, use `docker-compose`
+> instead of `docker compose`.
+
+### Plain Docker (no Compose)
+
+```sh
+docker build -t dottools .
+docker run -it --rm -v "$PWD":/workspace dottools
+```
+
+Notes:
+
+- Everything is installed via `link_dotfiles.sh` during the build; the shell is
+  bash (`CMD ["bash"]`) with `/workspace` as the default directory.
+- Tools not packaged by Debian are pulled from upstream releases: helix,
+  carapace, uv; plus Python 3.12 + pip from the base image.
+- Match host UID/GID so mounted files keep their ownership:
+  `USER_ID=$(id -u) GROUP_ID=$(id -g) docker compose build`.
+- A named `uv-cache` volume persists Python package caches across runs.
+
 ## Included configs
 
 | File / dir                  | Purpose                            |
@@ -38,6 +86,7 @@ To install packages only, run `./install.sh` on its own.
 | `chargectl/`                | Battery charge limiter (Termux)    |
 | `glazevm/`                  | GlazeWM (Windows) config           |
 | `start.bat`                 | Windows startup script             |
+| `Dockerfile`, `docker-compose.yml` | Containerized Linux env (see above) |
 
 ## Platforms
 

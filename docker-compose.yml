@@ -1,0 +1,22 @@
+services:
+  dottools:
+    build:
+      context: .
+      args:
+        USERNAME: dev
+        # Match your host user so mounted files keep sane ownership:
+        #   USER_ID=$(id -u) GROUP_ID=$(id -g) docker compose build
+        UID: ${USER_ID:-1000}
+        GID: ${GROUP_ID:-1000}
+    init: true            # proper signal handling / zombie reaping
+    tty: true
+    stdin_open: true
+    working_dir: /workspace
+    volumes:
+      # Project under analysis; override with PROJECT_DIR=/path/to/repo
+      - ${PROJECT_DIR:-.}:/workspace
+      # Persist Python package cache across runs
+      - uv-cache:/home/dev/.cache/uv
+
+volumes:
+  uv-cache:

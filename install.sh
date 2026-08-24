@@ -4,7 +4,7 @@ set -euo pipefail
 # --- Detect platform -------------------------------------------------------
 
 detect_platform() {
-    if [[ -d "$PREFIX" ]] && command -v pkg >/dev/null 2>&1; then
+    if [[ -n "${PREFIX:-}" && -d "$PREFIX" ]] && command -v pkg >/dev/null 2>&1; then
         echo "termux"
     elif [[ "$(uname)" == "Darwin" ]]; then
         echo "macos"
