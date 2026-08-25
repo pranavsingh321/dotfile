@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Architecture Wiring - Dotfile Project</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0d1117; color: #c9d1d9; padding: 40px; }
+  .container { max-width: 1200px; margin: 0 auto; }
+  h1 { color: #58a6ff; font-size: 2em; margin-bottom: 8px; }
+  .subtitle { color: #8b949e; margin-bottom: 40px; }
+  svg { width: 100%; height: auto; }
+  .node { cursor: pointer; }
+  .node rect { rx: 8; ry: 8; stroke-width: 2; transition: all 0.2s; }
+  .node:hover rect { filter: brightness(1.2); }
+  .node text { font-family: -apple-system, sans-serif; font-size: 12px; fill: #f0f6fc; }
+  .node .label { font-size: 11px; fill: #8b949e; }
+  .edge { stroke: #30363d; stroke-width: 1.5; fill: none; marker-end: url(#arrowhead); }
+  .edge.active { stroke: #58a6ff; stroke-width: 2; }
+  .legend { margin-top: 30px; display: flex; gap: 20px; flex-wrap: wrap; }
+  .legend-item { display: flex; align-items: center; gap: 8px; font-size: 0.9em; }
+  .legend-color { width: 20px; height: 12px; border-radius: 3px; }
+  .description { margin-top: 30px; background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 20px; }
+  .description h3 { color: #f0883e; margin-bottom: 12px; }
+  .description p { color: #8b949e; line-height: 1.6; font-size: 0.9em; }
+  .flow-steps { margin-top: 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; }
+  .flow-step { background: #0d1117; border: 1px solid #30363d; border-radius: 6px; padding: 16px; }
+  .flow-step .step-num { color: #58a6ff; font-weight: bold; margin-bottom: 4px; }
+  .flow-step .step-title { color: #f0f6fc; margin-bottom: 4px; }
+  .flow-step .step-desc { color: #8b949e; font-size: 0.85em; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Architecture Wiring Diagram</h1>
+  <p class="subtitle">How components connect and data flows</p>
+
+  <svg viewBox="0 0 900 500" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+        <polygon points="0 0, 10 3.5, 0 7" fill="#58a6ff" />
+      </marker>
+      <linearGradient id="grad-blue" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" style="stop-color:#1f6feb33" />
+        <stop offset="100%" style="stop-color:#1f6feb" />
+      </linearGradient>
+    </defs>
+
+    <!-- Git Repo -->
+    <g class="node" transform="translate(350, 20)">
+      <rect width="200" height="50" fill="#161b22" stroke="#58a6ff"/>
+      <text x="100" y="22" text-anchor="middle" font-weight="bold">📦 Git Repository</text>
+      <text x="100" y="38" text-anchor="middle" class="label">pranavsingh321/dotfile</text>
+    </g>
+
+    <!-- install.sh -->
+    <g class="node" transform="translate(50, 120)">
+      <rect width="160" height="50" fill="#161b22" stroke="#3fb950"/>
+      <text x="80" y="22" text-anchor="middle" font-weight="bold">🔧 install.sh</text>
+      <text x="80" y="38" text-anchor="middle" class="label">Platform Detection</text>
+    </g>
+
+    <!-- link_dotfiles.sh -->
+    <g class="node" transform="translate(250, 120)">
+      <rect width="180" height="50" fill="#161b22" stroke="#3fb950"/>
+      <text x="90" y="22" text-anchor="middle" font-weight="bold">🔗 link_dotfiles.sh</text>
+      <text x="90" y="38" text-anchor="middle" class="label">Symlink Orchestrator</text>
+    </g>
+
+    <!-- Docker -->
+    <g class="node" transform="translate(500, 120)">
+      <rect width="160" height="50" fill="#161b22" stroke="#bc8cff"/>
+      <text x="80" y="22" text-anchor="middle" font-weight="bold">🐳 Dockerfile</text>
+      <text x="80" y="38" text-anchor="middle" class="label">Container Build</text>
+    </g>
+
+    <!-- Platform Layers -->
+    <g class="node" transform="translate(30, 230)">
+      <rect width="140" height="45" fill="#161b22" stroke="#f0883e"/>
+      <text x="70" y="20" text-anchor="middle" font-weight="bold">🍎 macOS</text>
+      <text x="70" y="35" text-anchor="middle" class="label">brew + casks</text>
+    </g>
+
+    <g class="node" transform="translate(190, 230)">
+      <rect width="140" height="45" fill="#161b22" stroke="#f0883e"/>
+      <text x="70" y="20" text-anchor="middle" font-weight="bold">🐧 Linux</text>
+      <text x="70" y="35" text-anchor="middle" class="label">apt + installers</text>
+    </g>
+
+    <g class="node" transform="translate(350, 230)">
+      <rect width="140" height="45" fill="#161b22" stroke="#f778ba"/>
+      <text x="70" y="20" text-anchor="middle" font-weight="bold">📱 Termux</text>
+      <text x="70" y="35" text-anchor="middle" class="label">pkg + termux-api</text>
+    </g>
+
+    <g class="node" transform="translate(510, 230)">
+      <rect width="140" height="45" fill="#161b22" stroke="#bc8cff"/>
+      <text x="70" y="20" text-anchor="middle" font-weight="bold">🐧 Docker</text>
+      <text x="70" y="35" text-anchor="middle" class="label">Python 3.12-slim</text>
+    </g>
+
+    <!-- Home Directory -->
+    <g class="node" transform="translate(300, 340)">
+      <rect width="300" height="60" fill="#161b22" stroke="#58a6ff" stroke-dasharray="5,5"/>
+      <text x="150" y="25" text-anchor="middle" font-weight="bold">🏠 $HOME</text>
+      <text x="150" y="42" text-anchor="middle" class="label">Symlinked Dotfiles + Copied Configs</text>
+    </g>
+
+    <!-- Edges -->
+    <line x1="450" y1="70" x2="130" y2="120" class="edge active"/>
+    <line x1="450" y1="70" x2="340" y2="120" class="edge active"/>
+    <line x1="450" y1="70" x2="580" y2="120" class="edge active"/>
+
+    <line x1="130" y1="170" x2="100" y2="230" class="edge"/>
+    <line x1="130" y1="170" x2="260" y2="230" class="edge"/>
+    <line x1="130" y1="170" x2="420" y2="230" class="edge"/>
+    <line x1="340" y1="170" x2="100" y2="230" class="edge"/>
+    <line x1="340" y1="170" x2="260" y2="230" class="edge"/>
+    <line x1="340" y1="170" x2="420" y2="230" class="edge"/>
+    <line x1="580" y1="170" x2="580" y2="230" class="edge"/>
+
+    <line x1="100" y1="275" x2="350" y2="340" class="edge"/>
+    <line x1="260" y1="275" x2="400" y2="340" class="edge"/>
+    <line x1="420" y1="275" x2="450" y2="340" class="edge"/>
+    <line x1="580" y1="275" x2="550" y2="340" class="edge"/>
+
+    <!-- Tool boxes -->
+    <g class="node" transform="translate(660, 340)">
+      <rect width="200" height="120" fill="#161b22" stroke="#30363d"/>
+      <text x="100" y="20" text-anchor="middle" font-weight="bold" fill="#f0883e">🛠️ Tools Installed</text>
+      <text x="15" y="40" class="label">• starship (prompt)</text>
+      <text x="15" y="55" class="label">• carapace (completions)</text>
+      <text x="15" y="70" class="label">• fzf + ripgrep + bat</text>
+      <text x="15" y="85" class="label">• helix + neovim</text>
+      <text x="15" y="100" class="label">• tmux + tpm + zoxide</text>
+    </g>
+  </svg>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-color" style="background:#58a6ff"></div> Repository</div>
+    <div class="legend-item"><div class="legend-color" style="background:#3fb950"></div> Setup Scripts</div>
+    <div class="legend-item"><div class="legend-color" style="background:#f0883e"></div> Platforms</div>
+    <div class="legend-item"><div class="legend-color" style="background:#bc8cff"></div> Infrastructure</div>
+    <div class="legend-item"><div class="legend-color" style="background:#f778ba"></div> Mobile</div>
+  </div>
+
+  <div class="description">
+    <h3>Data Flow</h3>
+    <div class="flow-steps">
+      <div class="flow-step">
+        <div class="step-num">1</div>
+        <div class="step-title">Clone Repository</div>
+        <div class="step-desc">git clone → ~/dotfile</div>
+      </div>
+      <div class="flow-step">
+        <div class="step-num">2</div>
+        <div class="step-title">Run link_dotfiles.sh</div>
+        <div class="step-desc">Calls install.sh, then symlinks configs</div>
+      </div>
+      <div class="flow-step">
+        <div class="step-num">3</div>
+        <div class="step-title">Platform Detection</div>
+        <div class="step-desc">install.sh detects OS, installs packages</div>
+      </div>
+      <div class="flow-step">
+        <div class="step-num">4</div>
+        <div class="step-title">Dotfile Deployment</div>
+        <div class="step-desc">Files symlinked, directories copied to $HOME</div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

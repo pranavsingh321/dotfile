@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Decision Map - Dotfile Project</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0d1117; color: #c9d1d9; padding: 40px; }
+  .container { max-width: 1200px; margin: 0 auto; }
+  h1 { color: #58a6ff; font-size: 2em; margin-bottom: 8px; }
+  .subtitle { color: #8b949e; margin-bottom: 40px; }
+  .decision-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 20px; }
+  .decision-card { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 24px; }
+  .decision-card h3 { color: #f0f6fc; margin-bottom: 8px; font-size: 1.1em; }
+  .decision-card .choice { color: #3fb950; font-weight: 600; margin-bottom: 8px; }
+  .decision-card .rationale { color: #8b949e; line-height: 1.6; font-size: 0.9em; }
+  .category { margin-top: 40px; margin-bottom: 16px; color: #f0883e; font-size: 1.2em; border-bottom: 1px solid #30363d; padding-bottom: 8px; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Architecture Decision Map</h1>
+  <p class="subtitle">Key technical decisions and their rationale</p>
+
+  <div class="category">Platform Strategy</div>
+  <div class="decision-grid">
+    <div class="decision-card">
+      <h3>Multi-Platform Support</h3>
+      <div class="choice">→ macOS + Linux + Termux + Windows</div>
+      <div class="rationale">Single repo serves all personal devices. install.sh auto-detects platform and installs appropriate packages.</div>
+    </div>
+    <div class="decision-card">
+      <h3>Package Manager Abstraction</h3>
+      <div class="choice">→ brew / apt / pkg wrapper functions</div>
+      <div class="rationale">Idempotent install functions (brew_install, apt_install, termux_install) handle platform differences transparently.</div>
+    </div>
+    <div class="decision-card">
+      <h3>Symlink Strategy</h3>
+      <div class="choice">→ Symlink dotfiles, copy directories</div>
+      <div class="rationale">Files are symlinked for instant updates. Directories (helix, termux) are copied to avoid nested symlinks.</div>
+    </div>
+  </div>
+
+  <div class="category">Shell & Editor</div>
+  <div class="decision-grid">
+    <div class="decision-card">
+      <h3>Shell Choice</h3>
+      <div class="choice">→ Zsh (primary) + Bash (fallback)</div>
+      <div class="rationale">Zsh with oh-my-zsh for productivity. Bash config maintained for scripts and Docker.</div>
+    </div>
+    <div class="decision-card">
+      <h3>Editor Strategy</h3>
+      <div class="choice">→ Helix + Neovim (dual editors)</div>
+      <div class="rationale">Helix for modern modal editing, Neovim for ecosystem compatibility. Both configured with LSP support.</div>
+    </div>
+    <div class="decision-card">
+      <h3>Prompt System</h3>
+      <div class="choice">→ Starship (cross-shell)</div>
+      <div class="rationale">Single prompt config works across bash, zsh, and fish. Fast Rust-based implementation.</div>
+    </div>
+    <div class="decision-card">
+      <h3>Completion System</h3>
+      <div class="choice">→ Carapace</div>
+      <div class="rationale">Universal shell completions for 600+ CLI tools. Covers gaps in native completions.</div>
+    </div>
+  </div>
+
+  <div class="category">Infrastructure</div>
+  <div class="decision-grid">
+    <div class="decision-card">
+      <h3>Docker Environment</h3>
+      <div class="choice">→ Python 3.12-slim base</div>
+      <div class="rationale">Lightweight base image. Tools installed via apt + official installers. Useful for project analysis without host contamination.</div>
+    </div>
+    <div class="decision-card">
+      <h3>UID/GID Matching</h3>
+      <div class="choice">→ Build args USER_ID/GROUP_ID</div>
+      <div class="rationale">Mounted host files maintain correct ownership. Prevents permission issues in container.</div>
+    </div>
+    <div class="decision-card">
+      <h3>Cache Strategy</h3>
+      <div class="choice">→ Named Docker volume for uv cache</div>
+      <div class="rationale">Python package cache persists across container runs. Reduces network usage and startup time.</div>
+    </div>
+  </div>
+
+  <div class="category">Mobile (Termux)</div>
+  <div class="decision-grid">
+    <div class="decision-card">
+      <h3>Battery Management</h3>
+      <div class="choice">→ Custom chargectl daemon</div>
+      <div class="rationale">Root-only daemon limits charge to 90%. Prevents battery degradation on always-connected devices.</div>
+    </div>
+    <div class="decision-card">
+      <h3>Boot Persistence</h3>
+      <div class="choice">→ Magisk module + Termux login hook</div>
+      <div class="rationale">Dual approach: Magisk for true boot start, termux-login.sh for session start. Covers all scenarios.</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

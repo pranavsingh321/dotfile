@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>System Map - Dotfile Project</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0d1117; color: #c9d1d9; padding: 40px; }
+  .container { max-width: 1200px; margin: 0 auto; }
+  h1 { color: #58a6ff; font-size: 2em; margin-bottom: 8px; }
+  .subtitle { color: #8b949e; margin-bottom: 40px; }
+  .system-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+  .system-card { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 24px; position: relative; }
+  .system-card.core { border-color: #58a6ff44; }
+  .system-card.shell { border-color: #3fb95044; }
+  .system-card.editor { border-color: #f0883e44; }
+  .system-card.infra { border-color: #bc8cff44; }
+  .system-card.mobile { border-color: #f778ba44; }
+  .system-icon { font-size: 2em; margin-bottom: 12px; }
+  .system-card h3 { color: #f0f6fc; margin-bottom: 8px; }
+  .system-card p { color: #8b949e; font-size: 0.9em; line-height: 1.5; }
+  .system-items { margin-top: 12px; list-style: none; }
+  .system-items li { padding: 4px 0; color: #c9d1d9; font-size: 0.85em; }
+  .system-items li::before { content: '→ '; color: #58a6ff; }
+  .legend { margin-top: 40px; display: flex; gap: 20px; flex-wrap: wrap; }
+  .legend-item { display: flex; align-items: center; gap: 8px; }
+  .legend-dot { width: 12px; height: 12px; border-radius: 50%; }
+  .legend-dot.core { background: #58a6ff; }
+  .legend-dot.shell { background: #3fb950; }
+  .legend-dot.editor { background: #f0883e; }
+  .legend-dot.infra { background: #bc8cff; }
+  .legend-dot.mobile { background: #f778ba; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>System Architecture Map</h1>
+  <p class="subtitle">Component breakdown and responsibilities</p>
+
+  <div class="system-grid">
+    <div class="system-card core">
+      <div class="system-icon">⚙️</div>
+      <h3>Core Infrastructure</h3>
+      <p>Platform detection, package installation, dotfile linking</p>
+      <ul class="system-items">
+        <li>install.sh — multi-platform installer</li>
+        <li>link_dotfiles.sh — symlink orchestrator</li>
+        <li>Dockerfile — container definition</li>
+        <li>docker-compose.yml — service orchestration</li>
+      </ul>
+    </div>
+
+    <div class="system-card shell">
+      <div class="system-icon">🐚</div>
+      <h3>Shell Configuration</h3>
+      <p>Zsh/Bash setup with plugins and prompt</p>
+      <ul class="system-items">
+        <li>.zshrc — Zsh config (oh-my-zsh)</li>
+        <li>.bashrc — Bash config</li>
+        <li>.bashrc_mac — macOS-specific Bash</li>
+        <li>zsh-autosuggestions plugin</li>
+        <li>starship prompt</li>
+      </ul>
+    </div>
+
+    <div class="system-card shell">
+      <div class="system-icon">🖥️</div>
+      <h3>Terminal Multiplexer</h3>
+      <p>tmux sessions, plugins, and switching</p>
+      <ul class="system-items">
+        <li>.tmux.conf — tmux configuration</li>
+        <li>tpm — plugin manager</li>
+        <li>switch-session-fzf.sh — fzf session picker</li>
+      </ul>
+    </div>
+
+    <div class="system-card editor">
+      <div class="system-icon">✏️</div>
+      <h3>Editors</h3>
+      <p>Helix and Neovim modal editors</p>
+      <ul class="system-items">
+        <li>.config/helix/config.toml — Helix settings</li>
+        <li>.config/helix/languages.toml — LSP config</li>
+        <li>neovim — installed via apt/brew</li>
+      </ul>
+    </div>
+
+    <div class="system-card editor">
+      <div class="system-icon">🔍</div>
+      <h3>Search & Navigation</h3>
+      <p>CLI tools for finding files and content</p>
+      <ul class="system-items">
+        <li>fzf — fuzzy finder</li>
+        <li>ripgrep — fast grep</li>
+        <li>bat — syntax-highlighted cat</li>
+        <li>zoxide — smart cd</li>
+      </ul>
+    </div>
+
+    <div class="system-card infra">
+      <div class="system-icon">🐳</div>
+      <h3>Docker Environment</h3>
+      <p>Portable Linux container with all tools</p>
+      <ul class="system-items">
+        <li>Python 3.12-slim base</li>
+        <li>All tools pre-installed</li>
+        <li>Volume-mounted workspace</li>
+        <li>uv cache persistence</li>
+      </ul>
+    </div>
+
+    <div class="system-card mobile">
+      <div class="system-icon">📱</div>
+      <h3>Termux (Android)</h3>
+      <p>Mobile development environment</p>
+      <ul class="system-items">
+        <li>.termux/ — Termux configs</li>
+        <li>chargectl — battery limiter</li>
+        <li>Magisk module — boot persistence</li>
+        <li>termux-api integration</li>
+      </ul>
+    </div>
+
+    <div class="system-card core">
+      <div class="system-icon">🔐</div>
+      <h3>Secrets & Config</h3>
+      <p>Sensitive data and window manager configs</p>
+      <ul class="system-items">
+        <li>.secret_sample → ~/.secret</li>
+        <li>.gitconfig — Git configuration</li>
+        <li>.config/aerospace/ — macOS WM</li>
+        <li>glazevm/ — Windows WM config</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot core"></div> Core</div>
+    <div class="legend-item"><div class="legend-dot shell"></div> Shell</div>
+    <div class="legend-item"><div class="legend-dot editor"></div> Editor/Tools</div>
+    <div class="legend-item"><div class="legend-dot infra"></div> Infrastructure</div>
+    <div class="legend-item"><div class="legend-dot mobile"></div> Mobile</div>
+  </div>
+</div>
+</body>
+</html>
