@@ -64,6 +64,57 @@ Notes:
   `USER_ID=$(id -u) GROUP_ID=$(id -g) docker compose build`.
 - A named `uv-cache` volume persists Python package caches across runs.
 
+## Architecture Documentation (Banneker)
+
+Automated codebase analysis and architecture diagrams using [Banneker](https://www.npmjs.com/package/banneker).
+
+### Setup
+
+```sh
+# Install Banneker commands into opencode
+npx banneker --opencode
+```
+
+### Generate Documentation
+
+```sh
+# Analyze codebase (brownfield projects)
+/banneker:document
+
+# Generate architecture diagrams (4 HTML files)
+/banneker:roadmap
+
+# Compile into navigable HTML reference
+/banneker:appendix
+
+# Export for downstream tools
+/banneker:feed
+```
+
+### View Diagrams
+
+```sh
+# Open diagrams in browser
+xdg-open .banneker/diagrams/executive-roadmap.html
+xdg-open .banneker/diagrams/decision-map.html
+xdg-open .banneker/diagrams/system-map.html
+xdg-open .banneker/diagrams/architecture-wiring.html
+```
+
+### Available Commands
+
+| Command | Description |
+|---------|-------------|
+| `/banneker:document` | Analyze existing codebase |
+| `/banneker:survey` | Discovery interview (new projects) |
+| `/banneker:architect` | Generate planning documents |
+| `/banneker:roadmap` | Generate architecture diagrams |
+| `/banneker:appendix` | Compile HTML reference |
+| `/banneker:feed` | Export to downstream frameworks |
+| `/banneker:audit` | Evaluate planning documents |
+| `/banneker:help` | Show all commands |
+| `/banneker:progress` | Check workflow status |
+
 ## Included configs
 
 | File / dir                  | Purpose                            |
