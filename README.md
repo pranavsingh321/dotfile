@@ -77,18 +77,26 @@ npx banneker --opencode
 
 ### Generate Documentation
 
+**Via CLI script:**
+
 ```sh
-# Analyze codebase (brownfield projects)
-/banneker:document
+# Run all steps (document → roadmap → appendix)
+./banneker-run.sh
 
-# Generate architecture diagrams (4 HTML files)
-/banneker:roadmap
+# Or run individual steps
+./banneker-run.sh document    # Analyze codebase
+./banneker-run.sh roadmap     # Generate diagrams
+./banneker-run.sh appendix    # Compile HTML reference
+./banneker-run.sh feed        # Export artifacts
+```
 
-# Compile into navigable HTML reference
-/banneker:appendix
+**Via opencode slash commands:**
 
-# Export for downstream tools
-/banneker:feed
+```sh
+/banneker:document    # Analyze codebase
+/banneker:roadmap     # Generate diagrams
+/banneker:appendix    # Compile HTML reference
+/banneker:feed        # Export artifacts
 ```
 
 ### View Diagrams
