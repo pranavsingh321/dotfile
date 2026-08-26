@@ -112,11 +112,92 @@ ensure_carapace() {
 ensure_python_tools() {
     if command -v pyright >/dev/null 2>&1 && command -v ruff >/dev/null 2>&1; then
         echo "  pyright and ruff already installed"
-    elif command -v pip >/dev/null 2>&1 || command -v pip3 >/dev/null 2>&1; then
-        echo "  Installing pyright and ruff via pip..."
-        pip install pyright ruff || pip3 install pyright ruff || echo "  WARN: could not install pyright/ruff via pip"
     else
-        echo "  WARN: pip not found. Install python first, then run pip install pyright ruff."
+        if command -v npm >/dev/null 2>&1; then
+            echo "  Installing pyright via npm..."
+            npm install -g pyright || echo "  WARN: could not install pyright via npm"
+        elif command -v pip >/dev/null 2>&1 || command -v pip3 >/dev/null 2>&1; then
+            echo "  Installing pyright and ruff via pip..."
+            pip install pyright ruff || pip3 install pyright ruff || echo "  WARN: could not install pyright/ruff via pip"
+        else
+            echo "  WARN: neither npm nor pip found. Install pyright and ruff manually."
+        fi
+        if command -v pip >/dev/null 2>&1 || command -v pip3 >/dev/null 2>&1; then
+            if ! command -v ruff >/dev/null 2>&1; then
+                echo "  Installing ruff via pip..."
+                pip install ruff || pip3 install ruff || echo "  WARN: could not install ruff via pip"
+            fi
+        fi
+    fi
+}
+
+ensure_go() {
+    if command -v go >/dev/null 2>&1; then
+        echo "  Go already installed"
+    else
+        echo "  Installing Go..."
+        local os arch
+        case "$(uname -s)" in
+            Darwin) os="darwin" ;;
+            Linux)  os="linux" ;;
+            *) echo "  WARN: unsupported OS for Go"; return ;;
+        esac
+        case "$(uname -m)" in
+            x86_64)  arch="amd64" ;;
+            aarch64|arm64) arch="arm64" ;;
+            *) echo "  WARN: unsupported arch for Go"; return ;;
+        esac
+        curl -fsSL "https://go.dev/dl/go1.23.4.${os}-${arch}.tar.gz" | sudo tar -xz -C /usr/local || \
+            echo "  WARN: Go install failed"
+    fi
+    if command -v go >/dev/null 2>&1 && ! command -v gopls >/dev/null 2>&1; then
+        echo "  Installing gopls..."
+        go install golang.org/x/tools/gopls@latest || echo "  WARN: could not install gopls"
+    fi
+}
+
+ensure_rust() {
+    if command -v rustup >/dev/null 2>&1; then
+        echo "  Rust already installed"
+    else
+        echo "  Installing Rust via rustup..."
+        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y || \
+            echo "  WARN: Rust install failed"
+        . "$HOME/.cargo/env" 2>/dev/null || true
+    fi
+    if command -v rustup >/dev/null 2>&1 && ! rustup component list --installed 2>/dev/null | grep -q rust-analyzer; then
+        echo "  Installing rust-analyzer..."
+        rustup component add rust-analyzer || echo "  WARN: could not install rust-analyzer"
+    fi
+}
+
+ensure_java() {
+    if command -v java >/dev/null 2>&1; then
+        echo "  Java already installed"
+    else
+        echo "  Installing Java JDK..."
+        if command -v apt-get >/dev/null 2>&1; then
+            sudo apt-get install -y openjdk-21-jdk-headless || echo "  WARN: could not install JDK via apt"
+        elif command -v brew >/dev/null 2>&1; then
+            brew install openjdk@21 || echo "  WARN: could not install JDK via brew"
+        elif [[ -n "${PREFIX:-}" ]]; then
+            pkg install openjdk-21 || echo "  WARN: could not install JDK via pkg"
+        else
+            echo "  WARN: no package manager found. Install JDK 17 manually."
+        fi
+    fi
+    if command -v java >/dev/null 2>&1 && ! command -v jdtls >/dev/null 2>&1; then
+        echo "  Installing Eclipse JDT Language Server..."
+        local jdtls_dir="$HOME/.local/jdtls"
+        mkdir -p "$jdtls_dir"
+        curl -fsSL "https://download.eclipse.org/jdtls/snapshots/jdt-language-server-1.54.0-202511211032.tar.gz" | \
+            tar -xzf - -C "$jdtls_dir" || echo "  WARN: could not download jdtls"
+        if [[ -f "$jdtls_dir/bin/jdtls" ]]; then
+            chmod +x "$jdtls_dir/bin/jdtls"
+            mkdir -p "$HOME/.local/bin"
+            ln -sf "$jdtls_dir/bin/jdtls" "$HOME/.local/bin/jdtls"
+            echo "  jdtls installed to $jdtls_dir"
+        fi
     fi
 }
 
@@ -146,6 +227,10 @@ install_macos() {
     ensure_oh_my_zsh
     ensure_zsh_autosuggestions
     ensure_tpm
+    ensure_go
+    ensure_rust
+    ensure_java
+    ensure_python_tools
 }
 
 # --- Linux (apt) -----------------------------------------------------------
@@ -171,6 +256,10 @@ install_linux() {
     ensure_tpm
     ensure_starship
     ensure_carapace
+    ensure_go
+    ensure_rust
+    ensure_java
+    ensure_python_tools
 }
 
 # --- Termux ----------------------------------------------------------------
@@ -188,6 +277,9 @@ install_termux() {
 
     echo "==> Installing shell/editor extras"
     ensure_tpm
+    ensure_go
+    ensure_rust
+    ensure_java
     ensure_python_tools
 }
 

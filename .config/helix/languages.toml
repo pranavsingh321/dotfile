@@ -26,7 +26,11 @@ args = ["server"]
 [[language]]
 name = "go"
 auto-format = true
+language-servers = ["gopls"]
 formatter = { command = "gofmt" }
+
+[language-server.gopls]
+command = "gopls"
 
 # Rust
 [[language]]
@@ -37,6 +41,17 @@ injection-regex = "rust"
 file-types = ["rs"]
 indent = { tab-width = 4, unit = "    " }
 auto-format = true
+
+# Java
+[[language]]
+name = "java"
+language-servers = ["jdtls"]
+auto-format = true
+indent = { tab-width = 4, unit = "    " }
+
+[language-server.jdtls]
+command = "jdtls"
+args = ["--stdio"]
 
 
 [[language]]
