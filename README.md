@@ -16,7 +16,7 @@ cd ~/dotfile
 The script:
 
 1. Runs `install.sh`, which detects the platform and installs all required
-   packages (and sets up oh-my-zsh, zsh-autosuggestions, and tpm).
+   packages (and sets up tpm).
 2. Copies the secret sample to `~/.secret` (edit it with your real secrets).
 3. Copies the helix and termux config folders.
 4. Symlinks the remaining dotfiles into `$HOME`.
@@ -56,10 +56,12 @@ To analyze any project, point `PROJECT_DIR` at it — it is mounted read-write a
 
 Notes:
 
-- Everything is installed via `link_dotfiles.sh` during the build; the shell is
-  bash (`CMD ["bash"]`) with `/workspace` as the default directory.
-- Tools not packaged by Debian are pulled from upstream releases: helix,
-  carapace, uv; plus Python 3.12 + pip from the base image.
+- `link_dotfiles.sh` runs during the build: it links all dotfiles and, via
+  `install.sh`, installs the CLI tools and every LSP server / formatter referenced
+  by `.config/helix/languages.toml` (rust-analyzer, pyright, ruff, gopls+gofmt,
+  jdtls, marksman, typescript-language-server + prettier, and the
+  vscode-html/css/json language servers). `install.sh` is the single source of
+  truth for tool installs; `rust-analyzer` is a prebuilt binary (no rustup/rustc).
 - Match host UID/GID so mounted files keep their ownership:
   `USER_ID=$(id -u) GROUP_ID=$(id -g) docker compose build`.
 - A named `uv-cache` volume persists Python package caches across runs.
