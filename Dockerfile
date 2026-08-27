@@ -106,7 +106,14 @@ RUN npm install -g pyright \
 USER "$USERNAME"
 RUN curl -LsSf https://astral.sh/uv/install.sh | sh
 
+# /etc/profile resets PATH to the Debian default on login, dropping the
+# Go/jdtls/cargo dirs added below via ENV PATH (and .bashrc bails early for
+# non-interactive shells). Restore them for every login shell so both
+# interactive (compose run) and non-interactive (docker run bash -lc) work.
 USER root
+RUN printf 'export PATH="/opt/jdtls/bin:/home/%s/.cargo/bin:/usr/local/go/bin:/home/%s/go/bin:$PATH"\n' \
+        "$USERNAME" "$USERNAME" > /etc/profile.d/dotfiles-path.sh \
+    && chmod 755 /etc/profile.d/dotfiles-path.sh
 RUN chown -R "$USERNAME:$GID" /home/"$USERNAME"/helix \
     && chown -R "$USERNAME:$GID" /home/"$USERNAME"/.cargo \
     && chown -R "$USERNAME:$GID" /home/"$USERNAME"/.rustup \

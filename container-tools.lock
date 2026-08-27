@@ -1,0 +1,149 @@
+version = 1
+
+# container-tools.lock -- uv.lock-style manifest of the `dottools` image.
+# Generated from image dottools sha256:9b415a1431bab2dbfe97999d0ef6a20c154ce5a3220e461452dc3d9cbf984e22
+# Each [[package]] maps a binary on the image PATH to its pinned version context and sha256.
+
+[[package]]
+name = "rg"
+version = "14.1.1"
+source = { path = "/usr/bin/rg" }
+hashes = ["sha256:55f963c480771ef14d4400664433f63e36e16d41c56ab44410c9521f2736763a"]
+
+[[package]]
+name = "fzf"
+version = "0.60"
+source = { path = "/usr/bin/fzf" }
+hashes = ["sha256:39061ec3ae5b7f02619fa27c133b3da22bc36e54d5936dcfeca9a47032b76cd5"]
+
+[[package]]
+name = "zsh"
+version = "5.9"
+source = { path = "/usr/bin/zsh" }
+hashes = ["sha256:bf3bf8ad4559d9a2c66487b74c88f0a68a5ee53e46b6128538c8f4771b56702e"]
+
+[[package]]
+name = "git"
+version = "2.47.3"
+source = { path = "/usr/bin/git" }
+hashes = ["sha256:356db14e102d68a1a37d8a1ac577dfd678d45d46e92f468bef8b7154e7bfdc60"]
+
+[[package]]
+name = "tmux"
+version = "3.5a"
+source = { path = "/usr/bin/tmux" }
+hashes = ["sha256:2967b531cb415b19afbc153bc19eff1c2e461726781a36c27c855a166bb36d4b"]
+
+[[package]]
+name = "hx"
+version = "25.07.1"
+source = { path = "/usr/local/bin/hx" }
+hashes = ["sha256:18b6db41236f1b9731511288448a5d02fbdee750e925f94471b88aa73b9c937a"]
+
+[[package]]
+name = "nvim"
+version = "0.10.4"
+source = { path = "/usr/bin/nvim" }
+hashes = ["sha256:995ef982d8b7138e303c62fcec9033625ae6e58db0a242510352ac3e8b72c9b9"]
+
+[[package]]
+name = "jq"
+version = "1.7"
+source = { path = "/usr/bin/jq" }
+hashes = ["sha256:b0b41584d8c82894b00e6963b1ec25ee8a22645993796eb373fea831c34a30be"]
+
+[[package]]
+name = "uv"
+version = "0.12.6"
+source = { path = "/home/dev/.local/bin/uv" }
+hashes = ["sha256:d381f11517c66523211b0876552ff7dea5c1b4b0f13800571b35225761302fba"]
+
+[[package]]
+name = "starship"
+version = "1.22.1"
+source = { path = "/usr/bin/starship" }
+hashes = ["sha256:4c2b123da1a23a5dd8ac147f915e398b92e280ee25f74c9cf7b9f76c480ff7e0"]
+
+[[package]]
+name = "carapace"
+version = "1.7.3"
+source = { path = "/usr/bin/carapace" }
+hashes = ["sha256:ecaa1a7fefb0b3f41c40941115bc5d7b55cb8605cc9dcd3c3c8abbea4b6b4c85"]
+
+[[package]]
+name = "zoxide"
+version = "0.9.7"
+source = { path = "/usr/bin/zoxide" }
+hashes = ["sha256:df4bf5e354c3f3256593bc19bbdf0cb296e2a41700179f6baaadc13e21ab11bb"]
+
+[[package]]
+name = "go"
+version = "1.23.4"
+source = { path = "/usr/local/go/bin/go" }
+hashes = ["sha256:c4859c0d97fe48a45d348c8ceba892a5c2ca1d7f3e429cf3ea4f2c0dae5cc406"]
+
+[[package]]
+name = "rustc"
+version = "1.98.0"
+source = { path = "/home/dev/.cargo/bin/rustc" }
+hashes = ["sha256:4acc9acc76d5079515b46346a485974457b5a79893cfb01112423c89aeb5aa10"]
+
+[[package]]
+name = "cargo"
+version = "1.98.0"
+source = { path = "/home/dev/.cargo/bin/cargo" }
+hashes = ["sha256:4acc9acc76d5079515b46346a485974457b5a79893cfb01112423c89aeb5aa10"]
+
+[[package]]
+name = "java"
+version = "21.0.12"
+source = { path = "/usr/bin/java" }
+hashes = ["sha256:6698f6f10143ed8463b06062281c727152d2e0ae2a3569b1716fbb2c6cedf0ba"]
+
+[[package]]
+name = "gopls"
+version = "0.23.0"
+source = { path = "/home/dev/go/bin/gopls" }
+hashes = ["sha256:ecaece82f6044d20b4b9d218b200a0a1a966969b6a091c09688bc2358de829bc"]
+
+[[package]]
+name = "pyright"
+version = "1.1.411"
+source = { path = "/home/dev/.local/bin/pyright" } 
+hashes = ["sha256:14a921226d2ada81371ccbded8ee58aa8f4d5879f359cc3bf2a50a7d52f883ac"]
+
+[[package]]
+name = "jdtls"
+version = "wrapper"
+source = { path = "/home/dev/.local/bin/jdtls" }
+hashes = ["sha256:ed0980ea2da080b79566b24b67f94f510d5001eeb401c7ed316748c0b03fbfee"]
+
+[[package]]
+name = "bat"
+version = "0.25.0"
+source = { path = "/usr/bin/batcat" }
+hashes = ["sha256:acabb6e19517709862d4750f0ce35958ab285514c7d9f9ed282ae57d63cf09c6"]
+
+[[package]]
+name = "node"
+version = "20.20.2"
+source = { path = "/usr/bin/node" }
+hashes = ["sha256:6295488653f0d93b0a157841746fef7e72cc4328cfb60c4bbe0ca2668a836ffd"]
+
+[[package]]
+name = "npm"
+version = "10.8.2"
+source = { path = "/usr/bin/npm" }
+hashes = ["sha256:8e5f6f3429f8cdbe693cdc29904e9d5a7b127a494bd15c804bd54c7403bfcbe7"]
+
+[[package]]
+name = "python3"
+version = "3.12.14"
+source = { path = "/usr/local/bin/python3" }
+hashes = ["sha256:0e6475dfda68a9b2d93501449fc47593ca169010e8f4881577b97463fd0c1263"]
+
+[[package]]
+name = "python"
+version = "3.12.14"
+source = { path = "/usr/local/bin/python" }
+hashes = ["sha256:0e6475dfda68a9b2d93501449fc47593ca169010e8f4881577b97463fd0c1263"]
