@@ -1,9 +1,5 @@
 version = 1
 
-# container-tools.lock -- uv.lock-style manifest of the `dottools` image.
-# Generated from image dottools sha256:9b415a1431bab2dbfe97999d0ef6a20c154ce5a3220e461452dc3d9cbf984e22
-# Each [[package]] maps a binary on the image PATH to its pinned version context and sha256.
-
 [[package]]
 name = "rg"
 version = "14.1.1"
