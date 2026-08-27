@@ -59,12 +59,24 @@ Notes:
 - `link_dotfiles.sh` runs during the build: it links all dotfiles and, via
   `install.sh`, installs the CLI tools and every LSP server / formatter referenced
   by `.config/helix/languages.toml` (rust-analyzer, pyright, ruff, gopls+gofmt,
-  jdtls, marksman, typescript-language-server + prettier, and the
-  vscode-html/css/json language servers). `install.sh` is the single source of
-  truth for tool installs; `rust-analyzer` is a prebuilt binary (no rustup/rustc).
+  jdtls, marksman, bash-language-server + shfmt, typescript-language-server +
+  prettier, and the vscode-html/css/json language servers). `install.sh` is the
+  single source of truth for tool installs; `rust-analyzer`, `marksman`, and
+  `carapace` are prebuilt binaries (no rustup/rustc, no Go build).
+- `openssh-client` is installed so `git pull`/clone over SSH works inside the
+  container.
 - Match host UID/GID so mounted files keep their ownership:
   `USER_ID=$(id -u) GROUP_ID=$(id -g) docker compose build`.
 - A named `uv-cache` volume persists Python package caches across runs.
+
+### Save / load the image as a file
+
+To copy the built image to another machine, export it as a tarball:
+
+```sh
+podman save -o dottools.tar dottools:latest      # export
+podman load -i dottools.tar                      # import on the target
+```
 
 ## Architecture Documentation (Banneker)
 
@@ -145,7 +157,8 @@ xdg-open .banneker/diagrams/architecture-wiring.html
 ## Platforms
 
 - **macOS**: Homebrew — shell/CLI tools plus Ghostty and AeroSpace.
-- **Linux**: apt — shell/CLI tools; starship/carapace via official installers.
+- **Linux**: apt — shell/CLI tools; helix, starship, carapace, rust-analyzer, and
+  marksman via official/prebuilt installers.
 - **Termux**: `pkg` — shell/CLI tools.
 
 ## Notes

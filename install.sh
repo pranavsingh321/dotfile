@@ -106,10 +106,7 @@ ensure_carapace() {
     case "$(uname -m)" in
         aarch64|arm64) cp_arch=arm64 ;;
     esac
-    local cp_ver
-    cp_ver=$(curl -fsSL https://api.github.com/repos/carapace-sh/carapace-bin/releases/latest |
-        grep -oE '"tag_name": "[^"]+"' | cut -d'"' -f4 | tr -d 'v')
-    [[ -n "$cp_ver" ]] || { echo "  WARN: could not determine carapace version"; return; }
+    local cp_ver=1.7.3
     curl -fsSL "https://github.com/carapace-sh/carapace-bin/releases/download/v${cp_ver}/carapace-bin_${cp_ver}_${cp_os}_${cp_arch}.tar.gz" \
         -o /tmp/carapace.tar.gz \
         && tar -xzf /tmp/carapace.tar.gz -C "$HOME/.local/bin" carapace \
@@ -274,7 +271,21 @@ ensure_web_lsp() {
     maybe_sudo npm install -g \
         typescript-language-server \
         vscode-langservers-extracted \
-        prettier || echo "  WARN: could not install web LSP tools via npm"
+        prettier \
+        bash-language-server || echo "  WARN: could not install web LSP tools via npm"
+}
+
+ensure_bash_tools() {
+    ensure_web_lsp
+    if command -v shfmt >/dev/null 2>&1; then
+        echo "  shfmt already installed"
+    elif command -v go >/dev/null 2>&1; then
+        echo "  Installing shfmt (bash formatter) via go..."
+        go install mvdan.cc/sh/v3/cmd/shfmt@latest || \
+            echo "  WARN: could not install shfmt"
+    else
+        echo "  WARN: shfmt requires Go. Install it manually."
+    fi
 }
 
 # --- macOS -----------------------------------------------------------------
@@ -306,7 +317,7 @@ install_macos() {
     ensure_java
     ensure_python_tools
     ensure_marksman
-    ensure_web_lsp
+    ensure_bash_tools
 }
 
 # --- Linux (apt) -----------------------------------------------------------
@@ -316,7 +327,7 @@ install_linux() {
 
     ensure_apt_available
 
-    local packages=(git fzf bat ripgrep tmux neovim carapace gh uv zoxide jq)
+    local packages=(git openssh-client fzf bat ripgrep tmux neovim carapace gh uv zoxide jq)
     for pkg in "${packages[@]}"; do
         apt_install "$pkg"
     done
@@ -332,7 +343,7 @@ install_linux() {
     ensure_java
     ensure_python_tools
     ensure_marksman
-    ensure_web_lsp
+    ensure_bash_tools
 }
 
 # --- Termux ----------------------------------------------------------------

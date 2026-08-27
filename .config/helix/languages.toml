@@ -82,6 +82,13 @@ language-servers = ["vscode-css-language-server"]
 name = "json"
 language-servers = ["vscode-json-language-server"]
 
+# Bash
+[[language]]
+name = "bash"
+auto-format = true
+language-servers = ["bash-language-server"]
+formatter = { command = "shfmt" }
+
 
 # LSP configurations
 [language-server.typescript-language-server]
@@ -99,3 +106,7 @@ args = ["--stdio"]
 [language-server.vscode-json-language-server]
 command = "vscode-json-language-server"
 args = ["--stdio"]
+
+[language-server.bash-language-server]
+command = "bash-language-server"
+args = ["start"]
