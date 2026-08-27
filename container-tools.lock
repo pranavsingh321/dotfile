@@ -95,6 +95,12 @@ source = { path = "/home/dev/.cargo/bin/cargo" }
 hashes = ["sha256:4acc9acc76d5079515b46346a485974457b5a79893cfb01112423c89aeb5aa10"]
 
 [[package]]
+name = "rust-analyzer"
+version = "1.98.0"
+source = { path = "/home/dev/.cargo/bin/rust-analyzer" }
+hashes = ["sha256:4acc9acc76d5079515b46346a485974457b5a79893cfb01112423c89aeb5aa10"]
+
+[[package]]
 name = "java"
 version = "21.0.12"
 source = { path = "/usr/bin/java" }
@@ -117,6 +123,12 @@ name = "jdtls"
 version = "wrapper"
 source = { path = "/home/dev/.local/bin/jdtls" }
 hashes = ["sha256:ed0980ea2da080b79566b24b67f94f510d5001eeb401c7ed316748c0b03fbfee"]
+
+[[package]]
+name = "ruff"
+version = "0.16.4"
+source = { path = "/home/dev/.local/bin/ruff" }
+hashes = ["sha256:b17e9a2ddd4932620a6349d6a475d61a49c8aa699c4e318528a98e4ad5773913"]
 
 [[package]]
 name = "bat"
