@@ -327,7 +327,7 @@ install_linux() {
 
     ensure_apt_available
 
-    local packages=(git openssh-client fzf bat ripgrep tmux neovim carapace gh uv zoxide jq)
+    local packages=(git openssh-client fzf bat ripgrep tmux neovim carapace gh uv zoxide jq ncurses-term)
     for pkg in "${packages[@]}"; do
         apt_install "$pkg"
     done
