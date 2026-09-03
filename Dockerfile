@@ -6,7 +6,8 @@
 FROM python:3.12-slim
 
 ENV DEBIAN_FRONTEND=noninteractive \
-    TERM=xterm-256color
+    TERM=xterm-256color \
+    COLORTERM=24bit
 
 # --- Build-time configuration ---
 ARG USERNAME=dev

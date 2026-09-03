@@ -2,6 +2,7 @@
 if [[ "$TERM" == "xterm-ghostty" ]]; then
   export TERM=xterm-256color
 fi
+export COLORTERM=24bit
 
 # --- Oh My Zsh ---
 export ZSH="$HOME/.oh-my-zsh"

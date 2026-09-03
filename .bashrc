@@ -4,6 +4,7 @@
 if [[ "$TERM" == "xterm-ghostty" ]]; then
   export TERM=xterm-256color
 fi
+export COLORTERM=24bit
 # ---- history ----
 export HISTFILE="$HOME/.bash_history"
 export HISTSIZE=1000
