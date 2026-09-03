@@ -62,7 +62,7 @@ RUN ln -s "/usr/lib/jvm/java-21-openjdk-$(dpkg --print-architecture)" /usr/local
 RUN printf 'export PATH="$HOME/.local/bin:$HOME/go/bin:/usr/local/go/bin:$PATH"\n' \
         > /etc/profile.d/dotfiles-path.sh \
     && chmod 755 /etc/profile.d/dotfiles-path.sh
-RUN chown -R "$USERNAME:$GID" /home/"$USERNAME"/helix \
+RUN chown -R "$USERNAME:$GID" /home/"$USERNAME"/helix 2>/dev/null || true \
     && mkdir -p "/home/$USERNAME/.cache/uv" \
     && chown -R "$USERNAME:$GID" "/home/$USERNAME/.cache" \
     && git config --system --add safe.directory '*' \
