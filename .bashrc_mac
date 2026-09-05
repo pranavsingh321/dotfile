@@ -28,7 +28,6 @@ alias pull='git pull'
 alias g='git'
 alias rgf='rg --files'
 alias j='jobs'
-alias v='nvim'
 
 eval "$(zoxide init bash --cmd cd)"
 export PS1="$ "

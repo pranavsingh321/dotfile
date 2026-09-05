@@ -14,10 +14,16 @@ services:
     stdin_open: true
     working_dir: /workspace
     volumes:
-      # Project under analysis; override with PROJECT_DIR=/path/to/repo
+      # Project under analysis. `ide run` sets this to the current directory;
+      # override with PROJECT_DIR=/path/to/repo when calling compose directly.
       - ${PROJECT_DIR:-~}:/workspace
-      # Persist Python package cache across runs
+      # Persist the whole dev home: shell history, tmux resurrect/continuum
+      # saves, go/cargo/npm caches, helix session state, and ~/.secret.
+      - dotfiles-home:/home/dev
+      # Keep the Python package cache separate (easy to clear without nuking
+      # everything else in the home volume).
       - uv-cache:/home/dev/.cache/uv
 
 volumes:
   uv-cache:
+  dotfiles-home:

@@ -30,7 +30,6 @@ alias gcom='git commit -m'
 alias push='git push'
 alias pull='git pull'
 alias j='jobs'
-alias v='nvim'
 alias h='hx'
 alias reload='exec bash'
 
@@ -70,6 +69,11 @@ eval "$(starship init bash)"
 # ---- Carapace ----
 export CARAPACE_BRIDGES='zsh,bash'
 source <(carapace _carapace bash)
+
+# ---- sessions: auto-attach tmux so resurrect/continuum restores work ----
+if command -v tmux >/dev/null 2>&1 && [[ -z "$TMUX" ]] && [[ -t 0 ]] && [[ "$TERM" != dumb ]]; then
+  tmux attach 2>/dev/null || tmux new-session -s main
+fi
 
 
 #git clone --recursive https://github.com/akinomyoga/ble.sh.git

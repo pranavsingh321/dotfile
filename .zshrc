@@ -59,7 +59,6 @@ alias pull='git pull'
 
 alias rgf='rg --files'
 alias j='jobs'
-alias v='nvim'
 alias h='hx'
 alias s='source ~/.zshrc'
 

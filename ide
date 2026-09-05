@@ -1,0 +1,72 @@
+#!/bin/bash
+# ide: launch the dottools container from anywhere, no cd needed.
+#
+# Usage:
+#   ide [OPTIONS] [SUBCOMMAND] [command...]
+#
+# Options (before the subcommand):
+#   --rm              remove the container on exit (default)
+#   --no-rm           keep the container after exit
+#   -m, --mount PATH  mount PATH at /workspace instead of the current dir
+#   -h, --help        show this help
+#
+# Subcommands:
+#   run (default)     interactive shell in the container
+#   up                start the container detached (then: ide attach)
+#   attach            attach to the running container
+#   stop / down       stop, or stop + remove the container
+#   rebuild           rebuild the image with the host UID/GID, then run
+#
+# Mounts $PWD (or -m PATH) at /workspace, plus ~/.ssh and ~/.secret
+# read-only when they exist. IDE_ENGINE=podman|docker overrides the default.
+set -euo pipefail
+
+# Assume the repo (and this compose file) always live at ~/dotfile.
+COMPOSE_FILE="$HOME/dotfile/docker-compose.yml"
+[[ -f "$COMPOSE_FILE" ]] || { echo "ide: compose file not found at $COMPOSE_FILE" >&2; exit 1; }
+
+ENGINE="${IDE_ENGINE:-podman}"
+command -v "$ENGINE" >/dev/null 2>&1 || ENGINE=docker
+command -v "$ENGINE" >/dev/null 2>&1 || { echo "ide: no container engine found" >&2; exit 1; }
+
+MOUNT="${PROJECT_DIR:-$PWD}"
+RM="--rm"
+while [[ $# -gt 0 && "$1" == -* ]]; do
+    case "$1" in
+        -h|--help) sed -n '2,21p' "$0"; exit 0 ;;
+        --rm)       RM="--rm";  shift ;;
+        --no-rm)    RM="";      shift ;;
+        -m|--mount) MOUNT="$2"; shift 2 ;;
+        *)          echo "ide: unknown option: $1" >&2; exit 1 ;;
+    esac
+done
+
+cmd="${1:-run}"
+shift || true
+
+mounts=()
+[ -e "$HOME/.ssh" ]    && mounts+=("--volume" "$HOME/.ssh:/home/dev/.ssh:ro")
+[ -e "$HOME/.secret" ] && mounts+=("--volume" "$HOME/.secret:/home/dev/.secret:ro")
+
+case "$cmd" in
+    run)
+        PROJECT_DIR="$MOUNT" "$ENGINE" compose -f "$COMPOSE_FILE" \
+            run $RM "${mounts[@]}" dottools "$@"
+        ;;
+    up)
+        PROJECT_DIR="$MOUNT" "$ENGINE" compose -f "$COMPOSE_FILE" up -d dottools
+        ;;
+    attach|exec)
+        "$ENGINE" compose -f "$COMPOSE_FILE" exec dottools "${@:-bash}"
+        ;;
+    stop) "$ENGINE" compose -f "$COMPOSE_FILE" stop dottools ;;
+    down) "$ENGINE" compose -f "$COMPOSE_FILE" down ;;
+    rebuild)
+        echo "ide: building with USER_ID=$(id -u) GROUP_ID=$(id -g) so mounts match your user..."
+        USER_ID="$(id -u)" GROUP_ID="$(id -g)" PROJECT_DIR="$MOUNT" \
+            "$ENGINE" compose -f "$COMPOSE_FILE" build dottools
+        PROJECT_DIR="$MOUNT" "$ENGINE" compose -f "$COMPOSE_FILE" \
+            run $RM "${mounts[@]}" dottools "$@"
+        ;;
+    *) echo "ide: unknown subcommand: $cmd" >&2; sed -n '2,21p' "$0"; exit 1 ;;
+esac

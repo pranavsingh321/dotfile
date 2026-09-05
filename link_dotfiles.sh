@@ -82,4 +82,9 @@ link_or_copy_dotfiles
 mkdir -p "$TARGET_DIR/.tmux"
 ln -sf "$SOURCE_DIR/switch-session-fzf.sh" "$TARGET_DIR/.tmux/switch-session-fzf.sh"
 echo "Linking switch-session-fzf.sh to ~/.tmux/"
+
+# `ide` command must be on PATH; link it into ~/.local/bin (created by install.sh)
+mkdir -p "$TARGET_DIR/.local/bin"
+ln -sf "$SOURCE_DIR/ide" "$TARGET_DIR/.local/bin/ide"
+echo "Linking ide to ~/.local/bin/ide"
 echo "Dotfiles setup complete."

@@ -275,6 +275,19 @@ ensure_web_lsp() {
         bash-language-server || echo "  WARN: could not install web LSP tools via npm"
 }
 
+ensure_linuxbrew() {
+    if command -v brew >/dev/null 2>&1; then
+        echo "  Linuxbrew already installed"
+        return
+    fi
+    echo "  Installing Linuxbrew (Homebrew for Linux)..."
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" || {
+        echo "  WARN: could not install Linuxbrew"; return; }
+    if [ -x /home/linuxbrew/.linuxbrew/bin/brew ]; then
+        eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+    fi
+}
+
 ensure_bash_tools() {
     ensure_web_lsp
     if command -v shfmt >/dev/null 2>&1; then
@@ -298,7 +311,7 @@ install_macos() {
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     fi
 
-    local formulas=(git fzf bat ripgrep starship carapace zoxide tmux helix neovim jq)
+    local formulas=(git fzf bat ripgrep starship carapace zoxide tmux helix jq)
     for pkg in "${formulas[@]}"; do
         brew_install "$pkg"
     done
@@ -327,10 +340,13 @@ install_linux() {
 
     ensure_apt_available
 
-    local packages=(git openssh-client fzf bat ripgrep tmux neovim carapace gh uv zoxide jq ncurses-term)
+    local packages=(git openssh-client fzf bat ripgrep tmux carapace gh uv zoxide jq ncurses-term)
     for pkg in "${packages[@]}"; do
         apt_install "$pkg"
     done
+
+    echo "==> Installing Linuxbrew"
+    ensure_linuxbrew
 
     echo "==> Installing shell/editor extras"
     ensure_tpm
@@ -378,7 +394,7 @@ case "$PLATFORM" in
     *)
         echo "Error: unsupported platform. Install the following manually:" >&2
         echo "  git, fzf, bat, ripgrep, starship, carapace, zoxide," >&2
-        echo "  tmux (+tpm), helix, neovim, jq" >&2
+        echo "  tmux (+tpm), helix, jq" >&2
         echo "  macOS only: ghostty, aerospace" >&2
         exit 1
         ;;

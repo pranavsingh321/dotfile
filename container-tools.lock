@@ -37,12 +37,6 @@ source = { path = "/usr/local/bin/hx" }
 hashes = ["sha256:18b6db41236f1b9731511288448a5d02fbdee750e925f94471b88aa73b9c937a"]
 
 [[package]]
-name = "nvim"
-version = "0.10.4"
-source = { path = "/usr/bin/nvim" }
-hashes = ["sha256:995ef982d8b7138e303c62fcec9033625ae6e58db0a242510352ac3e8b72c9b9"]
-
-[[package]]
 name = "jq"
 version = "1.7"
 source = { path = "/usr/bin/jq" }
