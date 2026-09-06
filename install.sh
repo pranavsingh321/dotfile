@@ -153,13 +153,33 @@ ensure_go() {
             aarch64|arm64) arch="arm64" ;;
             *) echo "  WARN: unsupported arch for Go"; return ;;
         esac
-        curl -fsSL "https://go.dev/dl/go1.23.4.${os}-${arch}.tar.gz" | sudo tar -xz -C /usr/local || \
+        local go_ver=1.23.4
+        local dest="/tmp/go${go_ver}.tar.gz"
+        maybe_sudo mkdir -p /usr/local
+        if curl -fsSL --retry 3 "https://go.dev/dl/go${go_ver}.${os}-${arch}.tar.gz" -o "$dest" \
+            && maybe_sudo tar -xz -C /usr/local -f "$dest"; then
+            rm -f "$dest"
+            echo "  Go installed"
+        else
+            rm -f "$dest"
             echo "  WARN: Go install failed"
+        fi
     fi
     if command -v go >/dev/null 2>&1 && ! command -v gopls >/dev/null 2>&1; then
         echo "  Installing gopls..."
         go install golang.org/x/tools/gopls@latest || echo "  WARN: could not install gopls"
     fi
+}
+
+ensure_uv() {
+    if command -v uv >/dev/null 2>&1; then
+        echo "  uv already installed"
+        return
+    fi
+    echo "  Installing uv via official installer..."
+    mkdir -p "$HOME/.local/bin"
+    curl -LsSf https://astral.sh/uv/install.sh | sh || \
+        echo "  WARN: could not install uv"
 }
 
 ensure_rust() {
@@ -311,7 +331,7 @@ install_macos() {
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     fi
 
-    local formulas=(git fzf bat ripgrep starship carapace zoxide tmux helix jq)
+    local formulas=(git fzf bat ripgrep starship carapace zoxide tmux helix uv jq)
     for pkg in "${formulas[@]}"; do
         brew_install "$pkg"
     done
@@ -340,7 +360,7 @@ install_linux() {
 
     ensure_apt_available
 
-    local packages=(git openssh-client fzf bat ripgrep tmux carapace gh uv zoxide jq ncurses-term)
+    local packages=(git openssh-client fzf bat ripgrep tmux carapace gh zoxide jq ncurses-term)
     for pkg in "${packages[@]}"; do
         apt_install "$pkg"
     done
@@ -353,6 +373,7 @@ install_linux() {
     ensure_helix
     ensure_node
     ensure_starship
+    ensure_uv
     ensure_go
     ensure_carapace
     ensure_rust

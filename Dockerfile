@@ -15,6 +15,8 @@ ARG UID=1000
 ARG GID=1000
 
 # --- Base packages needed for install.sh / link_dotfiles.sh to run ---
+# build-essential + procps + file are required by the Linuxbrew (Homebrew)
+# installer, which install.sh invokes on Linux.
 RUN apt-get update && apt-get install -y --no-install-recommends \
         sudo \
         curl \
@@ -22,6 +24,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         ca-certificates \
         locales \
         xz-utils \
+        build-essential \
+        procps \
+        file \
     && rm -rf /var/lib/apt/lists/*
 
 # UTF-8 locale (expected by .zshrc)
@@ -29,7 +34,9 @@ RUN sed -i 's/^# *en_US.UTF-8/en_US.UTF-8/' /etc/locale.gen && locale-gen
 ENV LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8
 
 # --- Dev user (passwordless sudo so install.sh's apt/pip/npm installs work) ---
-RUN groupadd -g "$GID" "$USERNAME" \
+# -o lets the build match a host GID that already exists in the base image
+# (e.g. GID 20 on macOS -> dialout in Debian) instead of failing.
+RUN groupadd -o -g "$GID" "$USERNAME" \
     && useradd -m -s /bin/bash -u "$UID" -g "$GID" "$USERNAME" \
     && echo "$USERNAME ALL=(ALL) NOPASSWD:ALL" > "/etc/sudoers.d/$USERNAME" \
     && chmod 0440 "/etc/sudoers.d/$USERNAME"
