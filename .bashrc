@@ -41,6 +41,7 @@ export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden'
 
 
 # ---- helix ----
+export EDITOR=hx
 export HELIX_RUNTIME="$HOME/helix/runtime"
 
 # ---- prompt ----

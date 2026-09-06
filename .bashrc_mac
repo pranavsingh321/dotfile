@@ -3,6 +3,7 @@ if [[ "$TERM" == "xterm-ghostty" ]]; then
 fi
 export HISTFILE=~/.bash_history
 export HISTSIZE=1000
+export EDITOR=hx
 
 alias ll='ls -alF'
 alias la='ls -A'

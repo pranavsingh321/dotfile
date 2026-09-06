@@ -19,6 +19,7 @@ source $(brew --prefix)/opt/fzf/shell/completion.zsh
 
 # --- Environment ---
 export LANG="en_US.UTF-8"
+export EDITOR=hx
 export HELIX_RUNTIME=~/helix/runtime
 
 export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
