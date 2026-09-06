@@ -43,7 +43,10 @@ RUN groupadd -o -g "$GID" "$USERNAME" \
 
 # Put install.sh's targets on PATH (go toolchain + user bins) so steps like
 # "go install gopls" work during the build. ${USERNAME} expands to the dev user.
-ENV PATH="/usr/local/go/bin:/home/${USERNAME}/.local/bin:/home/${USERNAME}/go/bin:$PATH"
+# DOTFILES_CONTAINER_BUILD lets install.sh skip host-only steps (Linuxbrew)
+# that stall container builds and bloat the image.
+ENV PATH="/usr/local/go/bin:/home/${USERNAME}/.local/bin:/home/${USERNAME}/go/bin:$PATH" \
+    DOTFILES_CONTAINER_BUILD=1
 
 USER "$USERNAME"
 WORKDIR "/home/$USERNAME"

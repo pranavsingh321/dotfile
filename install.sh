@@ -167,6 +167,7 @@ ensure_go() {
     fi
     if command -v go >/dev/null 2>&1 && ! command -v gopls >/dev/null 2>&1; then
         echo "  Installing gopls..."
+        go env -w GOPROXY="https://proxy.golang.org,https://goproxy.io,direct"
         go install golang.org/x/tools/gopls@latest || echo "  WARN: could not install gopls"
     fi
 }
@@ -222,7 +223,7 @@ ensure_java() {
         echo "  Installing Eclipse JDT Language Server..."
         local jdtls_dir="$HOME/.local/jdtls"
         mkdir -p "$jdtls_dir"
-        curl -fsSL "https://download.eclipse.org/jdtls/snapshots/jdt-language-server-1.54.0-202511211032.tar.gz" | \
+        curl -fsSL --retry 3 --retry-all-errors "https://download.eclipse.org/jdtls/snapshots/jdt-language-server-1.54.0-202511211032.tar.gz" | \
             tar -xzf - -C "$jdtls_dir" || echo "  WARN: could not download jdtls"
         if [[ -f "$jdtls_dir/bin/jdtls" ]]; then
             chmod +x "$jdtls_dir/bin/jdtls"
@@ -246,7 +247,7 @@ ensure_helix() {
         *) echo "  WARN: unsupported arch for helix"; return ;;
     esac
     local hx_tag=25.01.1
-    curl -fsSL "https://github.com/helix-editor/helix/releases/download/${hx_tag}/helix-${hx_tag}-${hx_arch}.tar.xz" -o /tmp/hx.tar.xz || { echo "  WARN: could not download helix"; return; }
+    curl -fsSL --retry 3 --retry-all-errors "https://github.com/helix-editor/helix/releases/download/${hx_tag}/helix-${hx_tag}-${hx_arch}.tar.xz" -o /tmp/hx.tar.xz || { echo "  WARN: could not download helix"; return; }
     maybe_sudo mkdir -p /opt/helix || return
     mkdir -p "$HOME/helix"
     maybe_sudo tar -xJf /tmp/hx.tar.xz -C /opt/helix --strip-components=1 || { echo "  WARN: could not extract helix"; return; }
@@ -301,7 +302,9 @@ ensure_linuxbrew() {
         return
     fi
     echo "  Installing Linuxbrew (Homebrew for Linux)..."
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" || {
+    curl -fsSL --retry 3 --retry-all-errors https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh -o /tmp/brew_install.sh || {
+        echo "  WARN: could not download Linuxbrew installer"; return; }
+    /bin/bash /tmp/brew_install.sh || {
         echo "  WARN: could not install Linuxbrew"; return; }
     if [ -x /home/linuxbrew/.linuxbrew/bin/brew ]; then
         eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
@@ -366,7 +369,11 @@ install_linux() {
     done
 
     echo "==> Installing Linuxbrew"
-    ensure_linuxbrew
+    if [ "${DOTFILES_CONTAINER_BUILD:-0}" = "1" ]; then
+        echo "  Skipping Linuxbrew: host-only, container uses apt/pip/prebuilt binaries"
+    else
+        ensure_linuxbrew
+    fi
 
     echo "==> Installing shell/editor extras"
     ensure_tpm
