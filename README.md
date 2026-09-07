@@ -37,39 +37,6 @@ From this repo directory:
 docker compose build
 ```
 
-The `ide` command wraps the compose setup so you can launch the environment
-from **any** directory — no need to `cd` into this repo:
-
-```sh
-ide [options] [SUBCOMMAND] [command...]
-
-Options:
-  --rm               remove the container on exit (default)
-  --no-rm            keep the container after exit
-  -m, --mount PATH   mount PATH instead of the current directory
-
-Subcommands:
-  run (default)      shell in $PWD (or -m PATH) mounted at /workspace
-  up                 start detached (then: ide attach)
-  attach             attach to the running container
-  stop               stop the container (keep it)
-  down               stop and remove container (home volume persists)
-  rebuild            rebuild the image (host UID/GID) and run
-```
-
-Examples:
-
-```sh
-ide                        # ephemeral shell in $PWD
-ide --no-rm                # shell that stays after exit
-ide -m ~/proj/some/repo    # work on a specific repo without cd-ing into it
-ide up && ide attach       # persistent background session
-```
-
-`ide` auto-detects podman (fallback: docker); it mounts the chosen directory at
-`/workspace`, persists your dev home, and mounts `~/.ssh` and `~/.secret`
-read-only into the container when present.
-
 Running compose directly works too:
 
 ```sh
@@ -91,6 +58,26 @@ To analyze any project, point `PROJECT_DIR` at it — it is mounted read-write a
 > On older Docker installs without the compose plugin, use `docker-compose`
 > instead of `docker compose`.
 
+> Set `USER_ID=$(id -u)` and `GROUP_ID=$(id -g)` when building so mounted files
+> keep your user's ownership:
+> `USER_ID=$(id -u) GROUP_ID=$(id -g) docker compose build`
+
+### opencode from inside the container
+
+The compose file reuses the **host's opencode** so `opencode` launched inside
+the container behaves exactly like the host install (same binary, config, and
+data/history):
+
+- The host `opencode` binary is mounted at `/usr/local/bin/opencode`.
+- `~/.config/opencode` (via `${HOME}`) is mounted at the container's config path.
+- `~/.local/share/opencode` (via `${HOME}`) is mounted at the container's data path.
+
+Set `OPENCODE_BIN` (the host binary path) before calling compose, e.g.:
+
+```sh
+OPENCODE_BIN=$(command -v opencode) docker compose run --rm dottools opencode
+```
+
 Notes:
 
 - `link_dotfiles.sh` runs during the build: it links all dotfiles and, via
@@ -104,7 +91,7 @@ Notes:
   container; mount or copy `~/.ssh` keys in for private repos.
 - Sessions survive restarts: the `dotfiles-home` volume keeps bash history,
   tmux resurrect/continuum saves (auto-restored on login), caches, and helix
-  state across `down`/`up` and even across `ide run` invocations.
+  state across `up`/`down` invocations.
 - Match host UID/GID so mounted files keep their ownership:
   `USER_ID=$(id -u) GROUP_ID=$(id -g) docker compose build`.
 - `uv-cache` persists the Python package cache; `dotfiles-home` persists the rest.
@@ -186,7 +173,6 @@ xdg-open .banneker/diagrams/architecture-wiring.html
 | `.gitconfig`                | Git config                         |
 | `.tmux.conf`                | tmux + tpm plugins                 |
 | `switch-session-fzf.sh`     | tmux session switcher (fzf)        |
-| `ide`                       | Launch the container from any dir  |
 | `.config/helix/`            | Helix editor config                |
 | `.config/aerospace/`        | AeroSpace window manager config    |
 | `.termux/`                  | Termux config                      |

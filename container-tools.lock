@@ -32,7 +32,7 @@ hashes = ["sha256:2967b531cb415b19afbc153bc19eff1c2e461726781a36c27c855a166bb36d
 
 [[package]]
 name = "hx"
-version = "25.07.1"
+version = "25.01.1"
 source = { path = "/usr/local/bin/hx" }
 hashes = ["sha256:18b6db41236f1b9731511288448a5d02fbdee750e925f94471b88aa73b9c937a"]
 
@@ -44,20 +44,20 @@ hashes = ["sha256:b0b41584d8c82894b00e6963b1ec25ee8a22645993796eb373fea831c34a30
 
 [[package]]
 name = "uv"
-version = "0.12.6"
+version = "0.12.10"
 source = { path = "/home/dev/.local/bin/uv" }
 hashes = ["sha256:d381f11517c66523211b0876552ff7dea5c1b4b0f13800571b35225761302fba"]
 
 [[package]]
 name = "starship"
-version = "1.22.1"
-source = { path = "/usr/bin/starship" }
+version = "1.26.0"
+source = { path = "/home/dev/.local/bin/starship" }
 hashes = ["sha256:4c2b123da1a23a5dd8ac147f915e398b92e280ee25f74c9cf7b9f76c480ff7e0"]
 
 [[package]]
 name = "carapace"
 version = "1.7.3"
-source = { path = "/usr/bin/carapace" }
+source = { path = "/home/dev/.local/bin/carapace" }
 hashes = ["sha256:ecaa1a7fefb0b3f41c40941115bc5d7b55cb8605cc9dcd3c3c8abbea4b6b4c85"]
 
 [[package]]
@@ -73,26 +73,14 @@ source = { path = "/usr/local/go/bin/go" }
 hashes = ["sha256:c4859c0d97fe48a45d348c8ceba892a5c2ca1d7f3e429cf3ea4f2c0dae5cc406"]
 
 [[package]]
-name = "rustc"
-version = "1.98.0"
-source = { path = "/home/dev/.cargo/bin/rustc" }
-hashes = ["sha256:4acc9acc76d5079515b46346a485974457b5a79893cfb01112423c89aeb5aa10"]
-
-[[package]]
-name = "cargo"
-version = "1.98.0"
-source = { path = "/home/dev/.cargo/bin/cargo" }
-hashes = ["sha256:4acc9acc76d5079515b46346a485974457b5a79893cfb01112423c89aeb5aa10"]
-
-[[package]]
 name = "rust-analyzer"
-version = "1.98.0"
-source = { path = "/home/dev/.cargo/bin/rust-analyzer" }
+version = "0.3.3025-standalone"
+source = { path = "/home/dev/.local/bin/rust-analyzer" }
 hashes = ["sha256:4acc9acc76d5079515b46346a485974457b5a79893cfb01112423c89aeb5aa10"]
 
 [[package]]
 name = "java"
-version = "21.0.12"
+version = "21.0.12.1"
 source = { path = "/usr/bin/java" }
 hashes = ["sha256:6698f6f10143ed8463b06062281c727152d2e0ae2a3569b1716fbb2c6cedf0ba"]
 
@@ -104,8 +92,8 @@ hashes = ["sha256:ecaece82f6044d20b4b9d218b200a0a1a966969b6a091c09688bc2358de829
 
 [[package]]
 name = "pyright"
-version = "1.1.411"
-source = { path = "/home/dev/.local/bin/pyright" } 
+version = "1.1.413"
+source = { path = "/home/dev/.local/bin/pyright" }
 hashes = ["sha256:14a921226d2ada81371ccbded8ee58aa8f4d5879f359cc3bf2a50a7d52f883ac"]
 
 [[package]]
@@ -116,7 +104,7 @@ hashes = ["sha256:ed0980ea2da080b79566b24b67f94f510d5001eeb401c7ed316748c0b03fbf
 
 [[package]]
 name = "ruff"
-version = "0.16.4"
+version = "0.16.6"
 source = { path = "/home/dev/.local/bin/ruff" }
 hashes = ["sha256:b17e9a2ddd4932620a6349d6a475d61a49c8aa699c4e318528a98e4ad5773913"]
 
@@ -128,13 +116,13 @@ hashes = ["sha256:acabb6e19517709862d4750f0ce35958ab285514c7d9f9ed282ae57d63cf09
 
 [[package]]
 name = "node"
-version = "20.20.2"
+version = "22.23.2"
 source = { path = "/usr/bin/node" }
 hashes = ["sha256:6295488653f0d93b0a157841746fef7e72cc4328cfb60c4bbe0ca2668a836ffd"]
 
 [[package]]
 name = "npm"
-version = "10.8.2"
+version = "10.9.8"
 source = { path = "/usr/bin/npm" }
 hashes = ["sha256:8e5f6f3429f8cdbe693cdc29904e9d5a7b127a494bd15c804bd54c7403bfcbe7"]
 

@@ -216,7 +216,7 @@ ensure_java() {
         elif [[ -n "${PREFIX:-}" ]]; then
             pkg install openjdk-21 || echo "  WARN: could not install JDK via pkg"
         else
-            echo "  WARN: no package manager found. Install JDK 17 manually."
+            echo "  WARN: no package manager found. Install JDK 21 manually."
         fi
     fi
     if command -v java >/dev/null 2>&1 && ! command -v jdtls >/dev/null 2>&1; then
@@ -317,7 +317,11 @@ ensure_bash_tools() {
         echo "  shfmt already installed"
     elif command -v go >/dev/null 2>&1; then
         echo "  Installing shfmt (bash formatter) via go..."
-        go install mvdan.cc/sh/v3/cmd/shfmt@latest || \
+        # Pin to a version buildable with the Go installed by ensure_go (currently
+        # 1.23.4). Newer shfmt (>= v3.13.0) requires a newer Go toolchain and forces
+        # a large toolchain download during container builds.
+        go env -w GOPROXY="https://proxy.golang.org,direct"
+        go install mvdan.cc/sh/v3/cmd/shfmt@v3.12.0 || \
             echo "  WARN: could not install shfmt"
     else
         echo "  WARN: shfmt requires Go. Install it manually."

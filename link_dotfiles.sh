@@ -12,9 +12,9 @@ SCRIPT_NAME=$(basename "$0")
 # Expected directory for dotfile
 EXPECTED_DIR="$HOME/dotfile"
 
-# Check if the current directory is ~/dotfiles
+# Check if the current directory is ~/dotfile
 if [[ "$SOURCE_DIR" != "$EXPECTED_DIR" ]]; then
-    echo "Error: This script must be run from the ~/dotfiles directory."
+    echo "Error: This script must be run from the ~/dotfile directory."
     exit 1
 fi
 
@@ -82,9 +82,4 @@ link_or_copy_dotfiles
 mkdir -p "$TARGET_DIR/.tmux"
 ln -sf "$SOURCE_DIR/switch-session-fzf.sh" "$TARGET_DIR/.tmux/switch-session-fzf.sh"
 echo "Linking switch-session-fzf.sh to ~/.tmux/"
-
-# `ide` command must be on PATH; link it into ~/.local/bin (created by install.sh)
-mkdir -p "$TARGET_DIR/.local/bin"
-ln -sf "$SOURCE_DIR/ide" "$TARGET_DIR/.local/bin/ide"
-echo "Linking ide to ~/.local/bin/ide"
 echo "Dotfiles setup complete."
