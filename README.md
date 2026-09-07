@@ -107,6 +107,34 @@ Notes:
   compose file.
 - `uv-cache` persists the Python package cache; `dotfiles-home` persists the rest.
 
+### Container mounts
+
+Every mount lands in the container at a fixed path regardless of the host OS
+(macOS / Ubuntu / WSL). On startup the entrypoint verifies each one and prints
+`[ ok ]`, `[WARN]` (mount resolves but is empty), or `[FAIL]` with a fix hint;
+any `[FAIL]` stops the container.
+
+| Container path | Host source | Override (env) | Mode |
+| --- | --- | --- | --- |
+| `/workspace` | your project (default `~`) | `PROJECT_DIR` | rw |
+| `/host` | whole host root | `MOUNT_ROOT` (default `/`), `MOUNT_ROOT_MODE` (default `ro`) | ro |
+| `/home/dev` | `dotfiles-home` named volume (shell history, tmux saves, caches, `~/.secret`) | — | rw |
+| `/home/dev/.cache/uv` | `uv-cache` named volume | — | rw |
+| `/home/dev/.config/opencode` | `$HOME/.config/opencode` | — | rw |
+| `/home/dev/.local/share/opencode` | `$HOME/.local/share/opencode` | — | rw |
+| `/usr/local/bin/opencode` | host opencode binary | `OPENCODE_BIN` (default `~/.opencode/bin/opencode`) | ro |
+| `/usr/local/bin/dotfile-entrypoint.sh` | `./entrypoint.sh` (this repo) | — | ro |
+
+Cross-platform notes:
+
+- If a source doesn't exist — e.g. no opencode binary at
+  `~/.opencode/bin/opencode` — a *file* mount makes Docker refuse to start the
+  container. Pass `OPENCODE_BIN=$(command -v opencode)` to point at the real one.
+- macOS Docker Desktop only shares paths listed in **Settings → File sharing**;
+  `/host` may resolve but look empty for paths outside those.
+- WSL: use a project dir inside the distro (not `/mnt/c/...`) so `/workspace`
+  ownership resolves to your real UID/GID; otherwise set `USER_ID`/`GROUP_ID`.
+
 ### Save / load the image as a file
 
 To copy the built image to another machine, export it as a tarball:
