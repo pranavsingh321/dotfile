@@ -4,18 +4,25 @@ services:
       context: .
       args:
         USERNAME: dev
-        # Match your host user so mounted files keep sane ownership:
-        #   USER_ID=$(id -u) GROUP_ID=$(id -g) docker compose build
-        UID: ${USER_ID:-1000}
-        GID: ${GROUP_ID:-1000}
     image: dottools
     init: true            # proper signal handling / zombie reaping
     tty: true
     stdin_open: true
     working_dir: /workspace
+    # Start as root so the entrypoint can remap `dev` to the host user's
+    # UID/GID, then it drops privileges and execs the real command. No rebuild
+    # needed for a new host/username on macOS or Ubuntu.
+    user: "0:0"
+    entrypoint: ["/usr/local/bin/dotfile-entrypoint.sh"]
+    environment:
+      # Optional: force a UID/GID instead of inheriting from /workspace.
+      - USER_ID=${USER_ID:-}
+      - GROUP_ID=${GROUP_ID:-}
     volumes:
       # Project under analysis; override with PROJECT_DIR=/path/to/repo.
       - ${PROJECT_DIR:-~}:/workspace
+      # Entrypoint used to remap `dev` -> the host user at launch (no rebuild).
+      - ./entrypoint.sh:/usr/local/bin/dotfile-entrypoint.sh:ro
       # Persist the whole dev home: shell history, tmux resurrect/continuum
       # saves, go/cargo/npm caches, helix session state, and ~/.secret.
       - dotfiles-home:/home/dev

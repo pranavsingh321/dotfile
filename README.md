@@ -58,9 +58,19 @@ To analyze any project, point `PROJECT_DIR` at it — it is mounted read-write a
 > On older Docker installs without the compose plugin, use `docker-compose`
 > instead of `docker compose`.
 
-> Set `USER_ID=$(id -u)` and `GROUP_ID=$(id -g)` when building so mounted files
-> keep your user's ownership:
-> `USER_ID=$(id -u) GROUP_ID=$(id -g) docker compose build`
+### Running as your user (UID/GID)
+
+The container runs as the host user so mounted files keep sane ownership. Pass
+your user's IDs at **launch** time (no rebuild needed):
+
+```sh
+USER_ID=$(id -u) GROUP_ID=$(id -g) docker compose run --rm dottools
+```
+
+Defaults to UID/GID 1000 if not set. Note the image's files (`/home/dev`, the
+`dev` user) are built with UID 1000; if your launch UID differs you can either
+let the persistent `dotfiles-home` volume re-own itself or rebuild with
+`USER_ID=$(id -u) GROUP_ID=$(id -g) docker compose build`.
 
 ### opencode from inside the container
 
@@ -92,8 +102,9 @@ Notes:
 - Sessions survive restarts: the `dotfiles-home` volume keeps bash history,
   tmux resurrect/continuum saves (auto-restored on login), caches, and helix
   state across `up`/`down` invocations.
-- Match host UID/GID so mounted files keep their ownership:
-  `USER_ID=$(id -u) GROUP_ID=$(id -g) docker compose build`.
+- The host user's files in `~/.config/opencode` and `~/.local/share/opencode`
+  (and the whole host root) are mounted read-only/writable as configured in the
+  compose file.
 - `uv-cache` persists the Python package cache; `dotfiles-home` persists the rest.
 
 ### Save / load the image as a file
