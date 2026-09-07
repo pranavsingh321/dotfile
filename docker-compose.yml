@@ -18,8 +18,14 @@ services:
       # Optional: force a UID/GID instead of inheriting from /workspace.
       - USER_ID=${USER_ID:-}
       - GROUP_ID=${GROUP_ID:-}
+      # Sync the container username/group with the host so git/opencode/ssh
+      # run under the same identity (override with: USER=name docker compose ...).
+      - HOST_USERNAME=${USER:-}
+      - HOST_GROUP=${HOST_GROUP:-}
     volumes:
       # Project under analysis; override with PROJECT_DIR=/path/to/repo.
+      # Defaults to the host home (compose expands `~`) so /workspace is owned
+      # by the host user and its UID/GID drive the identity sync.
       - ${PROJECT_DIR:-~}:/workspace
       # Entrypoint used to remap `dev` -> the host user at launch (no rebuild).
       - ./entrypoint.sh:/usr/local/bin/dotfile-entrypoint.sh:ro
