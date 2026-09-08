@@ -207,10 +207,10 @@ ensure_java() {
     if command -v java >/dev/null 2>&1; then
         echo "  Java already installed"
     else
-        echo "  Installing Java JDK..."
+        echo "  Installing Java JRE (jdtls only needs a JRE, not the full JDK)..."
         if command -v apt-get >/dev/null 2>&1; then
             sudo apt-get update -qq
-            sudo apt-get install -y openjdk-21-jdk-headless || echo "  WARN: could not install JDK via apt"
+            sudo apt-get install -y openjdk-21-jre-headless || echo "  WARN: could not install JRE via apt"
         elif command -v brew >/dev/null 2>&1; then
             brew install openjdk@21 || echo "  WARN: could not install JDK via brew"
         elif [[ -n "${PREFIX:-}" ]]; then
