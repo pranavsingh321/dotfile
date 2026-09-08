@@ -354,7 +354,6 @@ install_macos() {
     ensure_tpm
     ensure_go
     ensure_rust
-    ensure_java
     ensure_python_tools
     ensure_marksman
     ensure_bash_tools
@@ -388,7 +387,11 @@ install_linux() {
     ensure_go
     ensure_carapace
     ensure_rust
-    ensure_java
+    if [ "${DOTFILES_CONTAINER_BUILD:-0}" = "1" ]; then
+        ensure_java
+    else
+        echo "  Skipping Java (skipped on host macOS/Ubuntu; installed in container only)"
+    fi
     ensure_python_tools
     ensure_marksman
     ensure_bash_tools

@@ -1,22 +1,14 @@
 #!/bin/bash
 
-# Directory to copy dotfiles from (current Git directory)
-SOURCE_DIR=$(pwd)
+# Directory to copy dotfiles from (resolve to this script's own directory so it
+# works from anywhere, not just from the current working directory)
+SOURCE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # Home directory
 TARGET_DIR=$HOME
 
 # Get the name of the script itself
-SCRIPT_NAME=$(basename "$0")
-
-# Expected directory for dotfile
-EXPECTED_DIR="$HOME/dotfile"
-
-# Check if the current directory is ~/dotfile
-if [[ "$SOURCE_DIR" != "$EXPECTED_DIR" ]]; then
-    echo "Error: This script must be run from the ~/dotfile directory."
-    exit 1
-fi
+SCRIPT_NAME=$(basename "${BASH_SOURCE[0]}")
 
 # Install required packages before copying any config
 if [[ -x "$SOURCE_DIR/install.sh" ]]; then
