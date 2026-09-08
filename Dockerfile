@@ -54,7 +54,8 @@ WORKDIR "/home/$USERNAME"
 # install.sh drops binaries here; pre-create so it is writable by the user.
 RUN mkdir -p "$HOME/.local/bin" "$HOME/.config/helix"
 
-# link_dotfiles.sh refuses to run from anywhere except ~/dotfile
+# Copy the repo into the home dir; link_dotfiles.sh resolves its own location,
+# so it works from any path.
 COPY --chown="$USERNAME:$GID" . "/home/$USERNAME/dotfile"
 WORKDIR "/home/$USERNAME/dotfile"
 
