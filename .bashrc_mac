@@ -30,7 +30,7 @@ alias g='git'
 alias rgf='rg --files'
 alias j='jobs'
 
-eval "$(zoxide init bash --cmd cd)"
+eval "$(zoxide init bash)"
 export PS1="$ "
 
 if [ -f ~/.secret ]; then

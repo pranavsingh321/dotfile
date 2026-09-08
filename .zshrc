@@ -17,6 +17,9 @@ source $ZSH/oh-my-zsh.sh
 source $(brew --prefix)/opt/fzf/shell/key-bindings.zsh
 source $(brew --prefix)/opt/fzf/shell/completion.zsh
 
+# --- Zoxide (z) ---
+eval "$(zoxide init zsh)"
+
 # --- Environment ---
 export LANG="en_US.UTF-8"
 export EDITOR=hx
