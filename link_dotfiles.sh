@@ -1,5 +1,14 @@
 #!/bin/bash
 
+# Skip package installation when --no-packages is passed
+SKIP_PACKAGES=0
+for arg in "$@"; do
+    case "$arg" in
+        --no-packages|-n) SKIP_PACKAGES=1 ;;
+        *) echo "Unknown argument: $arg" >&2; exit 1 ;;
+    esac
+done
+
 # Directory to copy dotfiles from (resolve to this script's own directory so it
 # works from anywhere, not just from the current working directory)
 SOURCE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -11,7 +20,9 @@ TARGET_DIR=$HOME
 SCRIPT_NAME=$(basename "${BASH_SOURCE[0]}")
 
 # Install required packages before copying any config
-if [[ -x "$SOURCE_DIR/install.sh" ]]; then
+if [[ "$SKIP_PACKAGES" -eq 1 ]]; then
+    echo "Skipping package installation (--no-packages)."
+elif [[ -x "$SOURCE_DIR/install.sh" ]]; then
     echo "Installing required packages..."
     bash "$SOURCE_DIR/install.sh"
 else
